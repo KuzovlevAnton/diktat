@@ -28,20 +28,24 @@ def lines_finding():
 
 def lines_grouping(lines):
     def find_pos(ceils_data):
-        nonlocal lines_temp, old_pos, points
+        nonlocal lines_temp, old_pos, points, hard_pos
         if len(lines_temp) == 0:
             return (-1, -1)
         current = lines_temp.pop(0)
         x = min(current[0][0], current[1][0])
         y = min(current[0][1], current[1][1])
-        if (x, y) in old_pos:
+        if (x, y) in old_pos or (x, y) in hard_pos:
             return find_pos(ceils_data)
         points.append((x, y))
         return (x, y)
 
-    def check_next_by_two_ceils(ceils_data, leftx, lefty, rightx, righty):
+    def check_next_by_two_ceils(ceils_data, leftx, lefty, rightx, righty, leftbackx, leftbacky, rightbackx, rightbacky):
         # print(ceils_data[leftx][lefty], ceils_data[rightx][righty])
         # print(leftx, lefty, rightx, righty)
+        if ceils_data[lefty][leftx] == ceils_data[rightbacky][rightbackx] == 255 and ceils_data[righty][rightx] == ceils_data[leftbacky][leftbackx] == 0:
+            return 3
+        if ceils_data[lefty][leftx] == ceils_data[rightbacky][rightbackx] == 0 and ceils_data[righty][rightx] == ceils_data[leftbacky][leftbackx] == 255:
+            return 2
         if ceils_data[lefty][leftx]==ceils_data[righty][rightx]==0:
             return 1
         if ceils_data[lefty][leftx]==255 and ceils_data[righty][rightx]==0:
@@ -52,17 +56,19 @@ def lines_grouping(lines):
             return 1
 
     def check_next_by_all_dir(ceils_data, x, y):
-        nonlocal dirrection, algorithms, old_pos
+        nonlocal dirrection, algorithms, old_pos, hard_pos
         match dirrection:
             case 0:
-                res=check_next_by_two_ceils(ceils_data, x-1,y-1,x,y-1)
+                res=check_next_by_two_ceils(ceils_data, x-1,y-1,x,y-1, x-1, y, x, y)
             case 1:
-                res=check_next_by_two_ceils(ceils_data, x,y-1,x,y)
+                res=check_next_by_two_ceils(ceils_data, x,y-1,x,y, x-1, y-1, x-1, y)
             case 2:
-                res=check_next_by_two_ceils(ceils_data, x,y,x-1,y)
+                res=check_next_by_two_ceils(ceils_data, x,y,x-1,y, x, y-1, x-1, y-1)
             case 3:
-                res=check_next_by_two_ceils(ceils_data, x-1,y,x-1,y-1)
-        if res:
+                res=check_next_by_two_ceils(ceils_data, x-1,y,x-1,y-1, x, y, x, y-1)
+        if res in (1, 2):
+            # if res == 2:
+            #     hard_pos.append((x, y))
             dirrection += 1
             dirrection = dirrection%4
             # print(x, y)
@@ -74,25 +80,29 @@ def lines_grouping(lines):
             match dirrection:
                 case 0:
                     y-=1
-                    if (x, y) in old_pos:
+                    res2=check_next_by_two_ceils(ceils_data, x-1,y-1,x,y-1, x-1, y, x, y)
+                    if (x, y) in old_pos and res2 not in (2, 3):
                         return (None, None)
                     old_pos.append((x, y))
                     algorithms[-1].append("↑")
                 case 1:
                     x+=1
-                    if (x, y) in old_pos:
+                    res2=check_next_by_two_ceils(ceils_data, x,y-1,x,y, x-1, y-1, x-1, y)
+                    if (x, y) in old_pos and res2 not in (2, 3):
                         return (None, None)
                     old_pos.append((x, y))
                     algorithms[-1].append("→")
                 case 2:
                     y+=1
-                    if (x, y) in old_pos:
+                    res2=check_next_by_two_ceils(ceils_data, x,y,x-1,y, x, y-1, x-1, y-1)
+                    if (x, y) in old_pos and res2 not in (2, 3):
                         return (None, None)
                     old_pos.append((x, y))
                     algorithms[-1].append("↓")
                 case 3:
                     x-=1
-                    if (x, y) in old_pos:
+                    res2=check_next_by_two_ceils(ceils_data, x-1,y,x-1,y-1, x, y, x, y-1)
+                    if (x, y) in old_pos and res2 not in (2, 3):
                         return (None, None)
                     old_pos.append((x, y))
                     algorithms[-1].append("←")
@@ -130,6 +140,7 @@ def lines_grouping(lines):
     # sys.setrecursionlimit(len(lines))
     dirrection = 0
     old_pos = []
+    hard_pos = []
     lines_temp = lines.copy()
     points = []
     points_result=[]
@@ -151,7 +162,6 @@ def lines_grouping(lines):
                 algorithms.append([])
             # position = get_pos(groups[-1][-1])
             # if lines_temp - no, to break
-
     if algorithms[-1] == []:
         algorithms.pop(-1)
 
@@ -177,7 +187,7 @@ def lines_grouping(lines):
 
 # path = "12345.png"
 
-# path = "96653-dlya-detey-2-3-goda-29.jpg"
+path = "96653-dlya-detey-2-3-goda-29.jpg"
 
 # path = "5412-coloring-white-mushrooms.png"
 
@@ -187,8 +197,11 @@ def lines_grouping(lines):
 
 # path = "images.png"
 
-path = "img-DKBCw0.png"
+# path = "img-DKBCw0.png"
 
+# path = "squares.png"
+
+# white_thereshold_relative = 0
 white_thereshold_relative = 0.65
 
 
@@ -312,3 +325,4 @@ for i in range(len(points)):
     cv2.putText(img, str(i+1), (ceil_border_size*points[i][0]+3, ceil_border_size*points[i][1]), font, scale, (0,0,0), 1)
 
 cv2.imwrite("ceils_field.png", img)
+
