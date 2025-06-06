@@ -201,8 +201,12 @@ path = "96653-dlya-detey-2-3-goda-29.jpg"
 
 # path = "squares.png"
 
-# white_thereshold_relative = 0
-white_thereshold_relative = 0.65
+# path = "3630.jpg"
+
+# path = "tower.png"
+
+white_thereshold_relative = 0.7
+# white_thereshold_relative = 0.65
 
 
 
@@ -219,7 +223,10 @@ image_size_horisontal = 54
 
 ceil_border_size_relative = 1
 ceil_border_color = 200
+text_color = 200
 
+
+cycles = 1
 
 
 ceil_border_size = int(10//ceil_border_size_relative)
@@ -289,22 +296,24 @@ print(lines)
 result, points=lines_grouping(lines)
 print(points)
 print(result)
-
-
+max_len = 0
+new_result = []
 for i in range(len(result)):
+    if len(result[i]) > max_len:max_len=len(result[i])
     string = str(result[i]).replace("\'", "").replace("[", "").replace("]", "").replace(",", "")
     for i2 in range(len(result[i])-1, 1, -1):
         string=string.replace(("↑ "*i2)[:-1], f"↑x{i2}")
         string=string.replace(("→ "*i2)[:-1], f"→x{i2}")
         string=string.replace(("↓ "*i2)[:-1], f"↓x{i2}")
         string=string.replace(("← "*i2)[:-1], f"←x{i2}")
+    new_result.append(string)
     print(str(i+1)+".", string)
 
 
 for i in range(len(points)):
     for y in range(ceil_border_size*points[i][1]-1, ceil_border_size*points[i][1]+2):
         for x in range(ceil_border_size*points[i][0]-1, ceil_border_size*points[i][0]+2):
-            ceils_field[y][x]=0
+            ceils_field[y][x]=text_color
     # ceils_field[ceil_border_size*i[1]][ceil_border_size*i[0]]=0
 
 ceils_field=numpy.array(ceils_field)
@@ -322,7 +331,32 @@ img = cv2.imread("ceils_field.png")
 
 
 for i in range(len(points)):
-    cv2.putText(img, str(i+1), (ceil_border_size*points[i][0]+3, ceil_border_size*points[i][1]), font, scale, (0,0,0), 1)
+    cv2.putText(img, str(i+1), (ceil_border_size*points[i][0]+3, ceil_border_size*points[i][1]), font, scale, (text_color,text_color,text_color), 1)
+
+max_len=10
+if cycles:
+    to_replace = []
+
+    for x in range(-1*max_len, max_len+1):
+        if x:
+            for y in range(-1*max_len, max_len+1):
+                if y:
+                    arrows = ["↑", "→"]
+                    if x<0:
+                        arrows[1] = "←"
+                    if y<0:
+                        arrows[0] = "↓"
+                    to_replace.append(f"{arrows[1]}{("x"+str(abs(x)))*(abs(x)!=1)} {arrows[0]}{("x"+str(abs(y)))*(abs(y)!=1)}")
+
+    # print(to_replace)
+    for i in range(len(new_result)):
+        for replaceble in to_replace:
+            for i2 in range(len(new_result[i])-1, 1, -1):
+                # print((i2-1)*(replaceble+" ")+replaceble, f"({replaceble})x{i2}")
+                new_result[i] = new_result[i].replace((i2-1)*(replaceble+" ")+replaceble+" ", f"({replaceble})x{i2} ")
+print(to_replace)
+print()
+for i in range(len(new_result)):
+    print(str(i+1)+".", new_result[i])
 
 cv2.imwrite("ceils_field.png", img)
-
