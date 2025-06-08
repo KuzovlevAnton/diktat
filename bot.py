@@ -301,8 +301,8 @@ async def show_help(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def show_log(update: Update, context: ContextTypes.DEFAULT_TYPE):
     global ADMINS
     user_id = update.message.from_user.id
-    with open('config.json') as f:
-        config = json.load(f)
+    # with open('config.json') as f:
+    #     config = json.load(f)
 
     with open("log.txt", "a") as file:
         if update.message.from_user.username:
