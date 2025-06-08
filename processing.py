@@ -323,7 +323,7 @@ def processing(path, image_size_horisontal=54, white_thereshold_relative=0.65, c
     print(to_replace)
     print()
     for i in range(len(new_result)):
-        text += f"{str(i + 1) + "."} {new_result[i]}\n"
+        text += f"{str(i + 1)}. {new_result[i]}\n"
         print(str(i+1)+".", new_result[i])
 
     cv2.imwrite("ceils_field.png", img)
