@@ -312,7 +312,9 @@ def processing(path, image_size_horisontal=54, white_thereshold_relative=0.65, c
                             arrows[1] = "←"
                         if y<0:
                             arrows[0] = "↓"
-                        to_replace.append(f"{arrows[1]}{("x"+str(abs(x)))*(abs(x)!=1)} {arrows[0]}{("x"+str(abs(y)))*(abs(y)!=1)}")
+                        x_data = 'x' + str(abs(x)) if abs(x) != 1 else ''
+                        y_data = 'x' + str(abs(y)) if abs(y) != 1 else ''
+                        to_replace.append(f"{arrows[1]}{x_data} {arrows[0]}{y_data}")
 
         # print(to_replace)
         for i in range(len(new_result)):
