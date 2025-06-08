@@ -326,6 +326,7 @@ def processing(path, image_size_horisontal=54, white_thereshold_relative=0.65, c
         text += f"{str(i + 1)}. {new_result[i]}\n"
         print(str(i+1)+".", new_result[i])
 
+
     cv2.imwrite("ceils_field.png", img)
 
     ceils_data_normal = cv2.imread("newimage.png")
