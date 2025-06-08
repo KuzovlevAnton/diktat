@@ -14,6 +14,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+max_size = 100
+
 # # Токен бота
 # with open('config.json') as f:
 #     config = json.load(f)
@@ -181,14 +183,15 @@ async def process_image(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def set_size(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    global max_size
     user_id = update.message.from_user.id
     set_self_params(user_id)
     """Устанавливает размер изображения"""
     try:
         size = int(context.args[0])
-        # if size < 10 or size > 2048:
-        #     await update.message.reply_text("Размер должен быть между 10 и 2048")
-        #     return
+        if size < 1 or size > max_size:
+            await update.message.reply_text(f"Размер должен быть между 1 и {max_size}")
+            return
         params[user_id]['size'] = size
         new_params_send(user_id, update.message.from_user.username)
         await update.message.reply_text(f"Размер установлен: {size}")
