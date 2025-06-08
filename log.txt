@@ -96,3 +96,7 @@
 2025-06-08 21:09:24.538672 id:6037881330, username:@n268367 admin success
 2025-06-08 21:09:24.891674 id:6037881330, username:@n268367, params: {971400141: {'size': 54, 'threshold': 0.65, 'ceilsize': 1, 'ceilcolor': 200, 'textcolor': 200, 'cycles': 1}, 6037881330: {'size': 54, 'threshold': 0.65, 'ceilsize': 1, 'ceilcolor': 200, 'textcolor': 200, 'cycles': 1}}, start
 2025-06-08 21:16:07.361670 id:971400141, username:@aizeen528, params: {971400141: {'size': 54, 'threshold': 0.65, 'ceilsize': 1, 'ceilcolor': 200, 'textcolor': 200, 'cycles': 1}, 6037881330: {'size': 54, 'threshold': 0.65, 'ceilsize': 1, 'ceilcolor': 200, 'textcolor': 200, 'cycles': 1}}, start
+2025-06-08 21:46:54.119655 id:6037881330, username:@n268367, params: {6037881330: {'size': 54, 'threshold': 0.65, 'ceilsize': 1, 'ceilcolor': 200, 'textcolor': 200, 'cycles': 1}}, start
+2025-06-08 21:51:12.125160 id:6037881330, username:@n268367, params: {6037881330: {'size': 54, 'threshold': 0.65, 'ceilsize': 1, 'ceilcolor': 200, 'textcolor': 200, 'cycles': 1}}, start
+2025-06-08 21:56:37.828499 id:6037881330, username:@n268367, params: {6037881330: {'size': 54, 'threshold': 0.65, 'ceilsize': 1, 'ceilcolor': 200, 'textcolor': 200, 'cycles': 1}}, photo path: https://api.telegram.org/file/bot7924949260:AAEmzX5OWbfoGwKvTz5RbcO2kypAE6P7RKU/photos/file_27.jpg
+2025-06-08 21:56:38.419489 id:6037881330, username:@n268367, params: {6037881330: {'size': 54, 'threshold': 0.65, 'ceilsize': 1, 'ceilcolor': 200, 'textcolor': 200, 'cycles': 1}}, start
