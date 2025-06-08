@@ -271,7 +271,7 @@ def processing(path, image_size_horisontal=54, white_thereshold_relative=0.65, c
             string=string.replace(("← "*i2)[:-1], f"←x{i2}")
         new_result.append(string)
         if not cycles:
-            text += f"{str(i+1)+"."} {string}\n"
+            text += f"{str(i+1)}. {string}\n"
         print(str(i+1)+".", string)
 
 
