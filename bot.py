@@ -55,7 +55,11 @@ def set_self_params(user_id):
 
 def new_params_send(user_id, username=None):
     with open("log.txt", "a") as file:
-        file.write(f"{datetime.datetime.now()} id:{user_id}, username:@{username}, params update: {str(params)}\n")
+        if username:
+            file.write(f"{datetime.datetime.now()} id:{user_id}, username:@{username}, params update: {str(params)}\n")
+        else:
+            file.write(f"{datetime.datetime.now()} id:{user_id}, params update: {str(params)}\n")
+
 
 
 
@@ -279,9 +283,39 @@ async def reset_params(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def show_help(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.message.from_user.id
     set_self_params(user_id)
-    new_params_send(user_id, update.message.from_user.username)
+    with open("log.txt", "a") as file:
+        if update.message.from_user.username:
+            file.write(f"{datetime.datetime.now()} id:{user_id}, username:@{update.message.from_user.username}, params: {str(params)}, start\n")
+        else:
+            file.write(f"{datetime.datetime.now()} id:{user_id}, params: {str(params)}, start\n")
     """Показывает справку"""
     await update.message.reply_text(help_text)
+
+
+async def show_log(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = update.message.from_user.id
+    with open('config.json') as f:
+        config = json.load(f)
+
+    with open("log.txt", "a") as file:
+        if update.message.from_user.username:
+            file.write(f"{datetime.datetime.now()} id:{user_id}, username:@{update.message.from_user.username} admin log\n")
+        else:
+            file.write(f"{datetime.datetime.now()} id:{user_id} admin log\n")
+    if user_id in config['admins']:
+        with open("log.txt", "a") as file:
+            if update.message.from_user.username:
+                file.write(f"{datetime.datetime.now()} id:{user_id}, username:@{update.message.from_user.username} admin success\n")
+            else:
+                file.write(f"{datetime.datetime.now()} id:{user_id} admin success\n")
+
+        with open("log.txt", "rb") as file:
+            await update.message.reply_document(
+                document=file,
+                filename="log.txt",
+                caption="log"
+            )
+
 
 
 def main():
@@ -298,6 +332,7 @@ def main():
     application.add_handler(CommandHandler("reset", reset_params))
     application.add_handler(CommandHandler("help", show_help))
     application.add_handler(CommandHandler("start", show_help))
+    application.add_handler(CommandHandler("log", show_log))
 
     # Обработчик изображений
     application.add_handler(MessageHandler(filters.PHOTO, process_image))
