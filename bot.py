@@ -189,8 +189,8 @@ async def set_size(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Устанавливает размер изображения"""
     try:
         size = int(context.args[0])
-        if size < 1 or size > max_size:
-            await update.message.reply_text(f"Размер должен быть между 1 и {max_size}")
+        if size < 5 or size > max_size:
+            await update.message.reply_text(f"Размер должен быть между 5 и {max_size}")
             return
         params[user_id]['size'] = size
         new_params_send(user_id, update.message.from_user.username)
