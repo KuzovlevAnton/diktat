@@ -43,6 +43,7 @@ DEFAULT_PARAMS = {
     'cycles': 1
 }
 
+
 # Глобальные параметры (будут изменяться командами)
 # params = DEFAULT_PARAMS.copy()
 params = {}
