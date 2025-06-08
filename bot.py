@@ -10,11 +10,17 @@ from processing import processing
 import json
 import asyncio
 import os
+from dotenv import load_dotenv
 
-# Токен бота
-with open('config.json') as f:
-    config = json.load(f)
-TOKEN = config['telegram_bot_token']
+load_dotenv()
+
+# # Токен бота
+# with open('config.json') as f:
+#     config = json.load(f)
+# TOKEN = config['telegram_bot_token']
+
+TOKEN = os.getenv("TOKEN")
+ADMINS = os.getenv('ADMINS')
 
 # Текст помощи
 help_text = """
@@ -293,6 +299,7 @@ async def show_help(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def show_log(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    global ADMINS
     user_id = update.message.from_user.id
     with open('config.json') as f:
         config = json.load(f)
@@ -302,7 +309,8 @@ async def show_log(update: Update, context: ContextTypes.DEFAULT_TYPE):
             file.write(f"{datetime.datetime.now()} id:{user_id}, username:@{update.message.from_user.username} admin log\n")
         else:
             file.write(f"{datetime.datetime.now()} id:{user_id} admin log\n")
-    if user_id in config['admins']:
+    # if user_id in config['admins']:
+    if str(user_id) in ADMINS.split():
         with open("log.txt", "a") as file:
             if update.message.from_user.username:
                 file.write(f"{datetime.datetime.now()} id:{user_id}, username:@{update.message.from_user.username} admin success\n")
@@ -319,6 +327,7 @@ async def show_log(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def main():
+    global TOKEN
     """Запускает бота"""
     application = Application.builder().token(TOKEN).build()
 

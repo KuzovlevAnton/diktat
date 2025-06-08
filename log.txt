@@ -114,3 +114,19 @@
 2025-06-08 23:06:07.019595 id:6037881330, username:@n268367 admin success
 2025-06-08 23:06:18.501056 id:6037881330, username:@n268367, params: {6037881330: {'size': 54, 'threshold': 0.65, 'ceilsize': 1, 'ceilcolor': 200, 'textcolor': 200, 'cycles': 1}}, photo path: https://api.telegram.org/file/bot7924949260:AAEmzX5OWbfoGwKvTz5RbcO2kypAE6P7RKU/photos/file_12.jpg
 2025-06-08 23:23:28.908739 id:6037881330, username:@n268367, params: {6037881330: {'size': 54, 'threshold': 0.65, 'ceilsize': 1, 'ceilcolor': 200, 'textcolor': 200, 'cycles': 1}}, start
+2025-06-08 23:35:27.175762 id:6037881330, username:@n268367, params: {6037881330: {'size': 54, 'threshold': 0.65, 'ceilsize': 1, 'ceilcolor': 200, 'textcolor': 200, 'cycles': 1}}, start
+2025-06-08 23:35:32.335796 id:6037881330, username:@n268367 admin log
+2025-06-08 23:35:46.325857 id:6037881330, username:@n268367, params: {6037881330: {'size': 54, 'threshold': 0.65, 'ceilsize': 1, 'ceilcolor': 200, 'textcolor': 200, 'cycles': 1}}, photo path: https://api.telegram.org/file/bot7924949260:AAEmzX5OWbfoGwKvTz5RbcO2kypAE6P7RKU/photos/file_33.jpg
+2025-06-08 23:35:52.634903 id:6037881330, username:@n268367 admin log
+2025-06-08 23:38:26.915070 id:6037881330, username:@n268367, params: {6037881330: {'size': 54, 'threshold': 0.65, 'ceilsize': 1, 'ceilcolor': 200, 'textcolor': 200, 'cycles': 1}}, start
+2025-06-08 23:38:27.023332 id:6037881330, username:@n268367 admin log
+2025-06-08 23:38:27.024332 id:6037881330, username:@n268367 admin success
+2025-06-08 23:39:55.322239 id:6037881330, username:@n268367 admin log
+2025-06-08 23:39:55.323239 id:6037881330, username:@n268367, params: {6037881330: {'size': 54, 'threshold': 0.65, 'ceilsize': 1, 'ceilcolor': 200, 'textcolor': 200, 'cycles': 1}}, start
+2025-06-08 23:39:55.468410 id:6037881330, username:@n268367 admin log
+2025-06-08 23:40:02.631951 id:6037881330, username:@n268367 admin log
+2025-06-08 23:40:47.194410 id:6037881330, username:@n268367 admin log
+2025-06-08 23:40:47.195399 id:6037881330, username:@n268367 admin success
+2025-06-08 23:41:12.269511 id:6037881330, username:@n268367, params: {6037881330: {'size': 54, 'threshold': 0.65, 'ceilsize': 1, 'ceilcolor': 200, 'textcolor': 200, 'cycles': 1}}, start
+2025-06-08 23:41:14.183834 id:6037881330, username:@n268367 admin log
+2025-06-08 23:41:14.183834 id:6037881330, username:@n268367 admin success
