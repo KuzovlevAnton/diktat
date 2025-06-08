@@ -311,7 +311,6 @@ async def show_log(update: Update, context: ContextTypes.DEFAULT_TYPE):
             file.write(f"{datetime.datetime.now()} id:{user_id} admin log\n")
     # if user_id in config['admins']:
     if str(user_id) in ADMINS.split():
-        await update.message.reply_text("1")
         with open("log.txt", "a") as file:
             if update.message.from_user.username:
                 file.write(f"{datetime.datetime.now()} id:{user_id}, username:@{update.message.from_user.username} admin success\n")
