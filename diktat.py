@@ -1,6 +1,7 @@
 import cv2
 import numpy
 
+
 def processing(path, image_size_horisontal=54, white_thereshold_relative=0.65, ceil_border_size_relative=1, ceil_border_color=200, text_color = 200, cycles=True):
     def black_in_range_check(from_x, to_x, from_y, to_y, white_thereshold):
         nonlocal cb_img
