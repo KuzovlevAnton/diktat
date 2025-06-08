@@ -100,3 +100,16 @@
 2025-06-08 21:51:12.125160 id:6037881330, username:@n268367, params: {6037881330: {'size': 54, 'threshold': 0.65, 'ceilsize': 1, 'ceilcolor': 200, 'textcolor': 200, 'cycles': 1}}, start
 2025-06-08 21:56:37.828499 id:6037881330, username:@n268367, params: {6037881330: {'size': 54, 'threshold': 0.65, 'ceilsize': 1, 'ceilcolor': 200, 'textcolor': 200, 'cycles': 1}}, photo path: https://api.telegram.org/file/bot7924949260:AAEmzX5OWbfoGwKvTz5RbcO2kypAE6P7RKU/photos/file_27.jpg
 2025-06-08 21:56:38.419489 id:6037881330, username:@n268367, params: {6037881330: {'size': 54, 'threshold': 0.65, 'ceilsize': 1, 'ceilcolor': 200, 'textcolor': 200, 'cycles': 1}}, start
+2025-06-08 22:03:10.577910 id:6037881330, username:@n268367, params: {6037881330: {'size': 54, 'threshold': 0.65, 'ceilsize': 1, 'ceilcolor': 200, 'textcolor': 200, 'cycles': 1}}, photo path: https://api.telegram.org/file/bot7924949260:AAEmzX5OWbfoGwKvTz5RbcO2kypAE6P7RKU/photos/file_28.jpg
+2025-06-08 22:03:32.216045 id:6037881330, username:@n268367, params: {6037881330: {'size': 54, 'threshold': 0.65, 'ceilsize': 1, 'ceilcolor': 200, 'textcolor': 200, 'cycles': 1}}, photo path: https://api.telegram.org/file/bot7924949260:AAEmzX5OWbfoGwKvTz5RbcO2kypAE6P7RKU/photos/file_29.jpg
+2025-06-08 22:04:20.494119 id:6037881330, username:@n268367, params: {6037881330: {'size': 54, 'threshold': 0.65, 'ceilsize': 1, 'ceilcolor': 200, 'textcolor': 200, 'cycles': 1}}, photo path: https://api.telegram.org/file/bot7924949260:AAEmzX5OWbfoGwKvTz5RbcO2kypAE6P7RKU/photos/file_31.jpg
+2025-06-08 22:04:33.859578 id:6037881330, username:@n268367, params: {6037881330: {'size': 54, 'threshold': 0.65, 'ceilsize': 1, 'ceilcolor': 200, 'textcolor': 200, 'cycles': 1}}, photo path: https://api.telegram.org/file/bot7924949260:AAEmzX5OWbfoGwKvTz5RbcO2kypAE6P7RKU/photos/file_32.jpg
+2025-06-08 22:04:58.421332 id:6037881330, username:@n268367, params: {6037881330: {'size': 54, 'threshold': 0.65, 'ceilsize': 1, 'ceilcolor': 200, 'textcolor': 200, 'cycles': 1}}, photo path: https://api.telegram.org/file/bot7924949260:AAEmzX5OWbfoGwKvTz5RbcO2kypAE6P7RKU/photos/file_10.jpg
+2025-06-08 22:05:14.711445 id:6037881330, username:@n268367, params: {6037881330: {'size': 54, 'threshold': 0.65, 'ceilsize': 1, 'ceilcolor': 200, 'textcolor': 200, 'cycles': 1}}, photo path: https://api.telegram.org/file/bot7924949260:AAEmzX5OWbfoGwKvTz5RbcO2kypAE6P7RKU/photos/file_12.jpg
+2025-06-08 23:03:37.635647 id:6037881330, username:@n268367 admin log
+2025-06-08 23:03:37.636725 id:6037881330, username:@n268367 admin success
+2025-06-08 23:04:04.560838 id:6037881330, username:@n268367 admin log
+2025-06-08 23:04:04.561715 id:6037881330, username:@n268367 admin success
+2025-06-08 23:06:07.019595 id:6037881330, username:@n268367 admin log
+2025-06-08 23:06:07.019595 id:6037881330, username:@n268367 admin success
+2025-06-08 23:06:18.501056 id:6037881330, username:@n268367, params: {6037881330: {'size': 54, 'threshold': 0.65, 'ceilsize': 1, 'ceilcolor': 200, 'textcolor': 200, 'cycles': 1}}, photo path: https://api.telegram.org/file/bot7924949260:AAEmzX5OWbfoGwKvTz5RbcO2kypAE6P7RKU/photos/file_12.jpg
