@@ -8,8 +8,8 @@ from telegram.ext import filters
 import datetime
 from processing import processing
 import json
-
-
+import asyncio
+import os
 
 # Токен бота
 with open('config.json') as f:
@@ -318,7 +318,7 @@ async def show_log(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 
-def main():
+async def main():
     """Запускает бота"""
     application = Application.builder().token(TOKEN).build()
 
@@ -338,8 +338,20 @@ def main():
     application.add_handler(MessageHandler(filters.PHOTO, process_image))
 
     # Запуск бота
-    application.run_polling()
+    # application.run_polling()
+
+    # Запуск бота
+    await application.initialize()
+    await application.start()
+    await application.updater.start_polling()  # Для версий PTB 20.x+
+
+    # Бесконечное ожидание
+    await asyncio.Event().wait()
+
+    # Остановка (этот код фактически никогда не выполнится)
+    await application.updater.stop()
+    await application.stop()
 
 
 if __name__ == '__main__':
-    main()
+    asyncio.run(main())
