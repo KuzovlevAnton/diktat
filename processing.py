@@ -1,15 +1,20 @@
-import cv2
 import numpy
+import cv2
+from PIL import Image
 
 def processing(path, image_size_horisontal=54, white_thereshold_relative=0.65, ceil_border_size_relative=1, ceil_border_color=200, text_color = 200, cycles=True):
     def black_in_range_check(from_x, to_x, from_y, to_y, white_thereshold):
         nonlocal cb_img
-        for y in range(from_y, to_y):
-            for x in range(from_x, to_x):
-                # print((cb_img[y][x]<=white_thereshold)*"123456789")
-                if cb_img[y][x] <= white_thereshold:
-                    return 0
-        return 255
+        region = cb_img[from_y:to_y, from_x:to_x]
+        return 0 if numpy.any(region <= white_thereshold) else 255
+    # def black_in_range_check(from_x, to_x, from_y, to_y, white_thereshold):
+    #     nonlocal cb_img
+    #     for y in range(from_y, to_y):
+    #         for x in range(from_x, to_x):
+    #             # print((cb_img[y][x]<=white_thereshold)*"123456789")
+    #             if cb_img[y][x] <= white_thereshold:
+    #                 return 0
+    #     return 255
 
 
     def lines_finding(ceils_data):
@@ -166,7 +171,7 @@ def processing(path, image_size_horisontal=54, white_thereshold_relative=0.65, c
 
 
 
-    white_thereshold = 255*white_thereshold_relative
+    white_thereshold = int(255*white_thereshold_relative)
 
 
 
@@ -185,7 +190,8 @@ def processing(path, image_size_horisontal=54, white_thereshold_relative=0.65, c
 
 
 
-    cb_img = cv2.imread(path,0)
+    # cb_img = cv2.imread(path,0)
+    cb_img = numpy.array(path)
 
 
 
@@ -245,6 +251,8 @@ def processing(path, image_size_horisontal=54, white_thereshold_relative=0.65, c
 
     cv2.imwrite("newimage.png", numpy.array(ceils_data))
 
+    text = ""
+
 
     lines = lines_finding(ceils_data)
     print(lines)
@@ -262,6 +270,8 @@ def processing(path, image_size_horisontal=54, white_thereshold_relative=0.65, c
             string=string.replace(("↓ "*i2)[:-1], f"↓x{i2}")
             string=string.replace(("← "*i2)[:-1], f"←x{i2}")
         new_result.append(string)
+        if not cycles:
+            text += f"{str(i+1)+"."} {string}\n"
         print(str(i+1)+".", string)
 
 
@@ -281,6 +291,7 @@ def processing(path, image_size_horisontal=54, white_thereshold_relative=0.65, c
     scale = 0.6
 
     cv2.imwrite("ceils_field.png", numpy.array(ceils_field))
+
 
     img = cv2.imread("ceils_field.png")
 
@@ -312,49 +323,16 @@ def processing(path, image_size_horisontal=54, white_thereshold_relative=0.65, c
     print(to_replace)
     print()
     for i in range(len(new_result)):
+        text += f"{str(i + 1) + "."} {new_result[i]}\n"
         print(str(i+1)+".", new_result[i])
 
     cv2.imwrite("ceils_field.png", img)
 
+    ceils_data_normal = cv2.imread("newimage.png")
 
-# path = "image-2.png"
 
-# path = "test.png"
+    img1 = Image.fromarray(img)
+    img2 = Image.fromarray(ceils_data_normal)
 
-# path = "d66e2aec5b534d4ab04c0749a3ab655f.jpg"
 
-# path = "0dd92fff1858cfa5251adc7af48ada22.jpg"
-
-# path = "0dd92fff1858cfa5251adc7af48ada22 (1).jpg"
-
-path = "64032-dlya-detey-2-3-let-shablony-krupnye-23.jpg"
-
-# path = "image-1.png"
-
-# path = "image.png"
-
-# path = "12345.png"
-
-# path = "96653-dlya-detey-2-3-goda-29.jpg"
-
-# path = "5412-coloring-white-mushrooms.png"
-
-# path = "istockphoto-1433038575-612x612.jpg"
-
-# path = "pi.png"
-
-# path = "images.png"
-
-# path = "img-DKBCw0.png"
-
-# path = "squares.png"
-
-# path = "3630.jpg"
-
-# path = "tower.png"
-
-# path = "22250_f525.jpg"
-
-# path = "Rick-Astley-Never-Gonna-Give-You-Up.webp"
-
-processing(path, 54, 0.65, 1, 200, 200, True)
+    return (img1, img2, text[:-1])
