@@ -188,18 +188,18 @@ async def process_image(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         await update.message.reply_text(f"Произошла ошибка: {str(e)}")
 
-async def keep_alive(context: ContextTypes.DEFAULT_TYPE):
+async def keep_alive():
     while True:
         try:
             async with aiohttp.ClientSession() as session:
-                async with session.get('https://api.telegram.org/botYOUR_TOKEN/getMe') as resp:
-                    with open("log.txt", "rb") as file:
-                        await context.bot.send_document(
-                            chat_id=ADMINS[0],
-                            document=file,
-                            filename="log.txt"
-                            # parse_mode='HTML'
-                        )
+                # async with session.get('https://api.telegram.org/botYOUR_TOKEN/getMe') as resp:
+                #     with open("log.txt", "rb") as file:
+                #         await context.bot.send_document(
+                #             chat_id=ADMINS[0],
+                #             document=file,
+                #             filename="log.txt"
+                #             # parse_mode='HTML'
+                #         )
                     await asyncio.sleep(300)  # Каждые 5 минут
         except:
             await asyncio.sleep(60)
@@ -358,26 +358,28 @@ async def show_log(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def log_send_to_admin(context: ContextTypes.DEFAULT_TYPE, message: str):
     try:
-        await context.bot.send_message(
-            chat_id=ADMINS[0],
-            caption=message,
-            parse_mode='HTML'
-        )
+        print(int(ADMINS.split()[0]))
+        # await context.bot.send_message(
+        #     chat_id=int(ADMINS.split()[0]),
+        #     text=message,
+        #     parse_mode='HTML'
+        # )
         with open("log.txt", "rb") as file:
             await context.bot.send_document(
-                chat_id=ADMINS[0],
+                chat_id=int(ADMINS.split()[0]),
                 document=file,
                 filename="log.txt",
                 caption=message
                 # parse_mode='HTML'
             )
+
         # await context.bot.send_message(
         #     chat_id=ADMINS[0],
         #     text=message,
         #     parse_mode='HTML'
         # )
     except Exception as e:
-        ...
+        print(e)
 
 async def main():
     global TOKEN
