@@ -11,6 +11,7 @@ import json
 import asyncio
 import os
 from dotenv import load_dotenv
+import aiohttp
 
 load_dotenv()
 
@@ -181,6 +182,14 @@ async def process_image(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         await update.message.reply_text(f"Произошла ошибка: {str(e)}")
 
+async def keep_alive():
+    while True:
+        try:
+            async with aiohttp.ClientSession() as session:
+                async with session.get('https://api.telegram.org/botYOUR_TOKEN/getMe') as resp:
+                    await asyncio.sleep(300)  # Каждые 5 минут
+        except:
+            await asyncio.sleep(60)
 
 async def set_size(update: Update, context: ContextTypes.DEFAULT_TYPE):
     global max_size
@@ -349,6 +358,8 @@ async def main():
 
     # Обработчик изображений
     application.add_handler(MessageHandler(filters.PHOTO, process_image))
+
+    asyncio.create_task(keep_alive())
 
     # Запуск бота
     # application.run_polling()
