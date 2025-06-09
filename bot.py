@@ -200,7 +200,7 @@ async def keep_alive():
 async def set_size(update: Update, context: ContextTypes.DEFAULT_TYPE):
     global max_size
     user_id = update.message.from_user.id
-    set_self_params(context, user_id)
+    set_self_params(user_id)
     """Устанавливает размер изображения"""
     try:
         size = int(context.args[0])
@@ -208,7 +208,7 @@ async def set_size(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await update.message.reply_text(f"Размер должен быть между 5 и {max_size}")
             return
         params[user_id]['size'] = size
-        new_params_send(user_id, update.message.from_user.username)
+        new_params_send(context, user_id, update.message.from_user.username)
         await update.message.reply_text(f"Размер установлен: {size}")
     except (IndexError, ValueError):
         await update.message.reply_text("Использование: /size <число>")
@@ -216,7 +216,7 @@ async def set_size(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def set_threshold(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.message.from_user.id
-    set_self_params(context, user_id)
+    set_self_params(user_id)
     """Устанавливает порог бинаризации"""
     try:
         threshold = float(context.args[0])
@@ -224,7 +224,7 @@ async def set_threshold(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await update.message.reply_text("Порог должен быть между 0 и 1")
             return
         params[user_id]['threshold'] = threshold
-        new_params_send(user_id, update.message.from_user.username)
+        new_params_send(context, user_id, update.message.from_user.username)
         await update.message.reply_text(f"Порог установлен: {threshold}")
     except (IndexError, ValueError):
         await update.message.reply_text("Использование: /threshold <дробное число от 0 до 1>")
@@ -232,7 +232,7 @@ async def set_threshold(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def set_ceilsize(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.message.from_user.id
-    set_self_params(context, user_id)
+    set_self_params(user_id)
     """Устанавливает размер ячейки"""
     try:
         ceilsize = float(context.args[0])
@@ -240,7 +240,7 @@ async def set_ceilsize(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await update.message.reply_text("Размер ячейки должен быть между 0.1 и 2")
             return
         params[user_id]['ceilsize'] = ceilsize
-        new_params_send(user_id, update.message.from_user.username)
+        new_params_send(context, user_id, update.message.from_user.username)
         await update.message.reply_text(f"Размер ячейки установлен: {ceilsize}")
     except (IndexError, ValueError):
         await update.message.reply_text("Использование: /ceilsize <число>")
@@ -248,7 +248,7 @@ async def set_ceilsize(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def set_ceilcolor(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.message.from_user.id
-    set_self_params(context, user_id)
+    set_self_params(user_id)
     """Устанавливает цвет ячеек"""
     try:
         color = int(context.args[0])
@@ -256,7 +256,7 @@ async def set_ceilcolor(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await update.message.reply_text("Цвет должен быть между 0 и 255")
             return
         params[user_id]['ceilcolor'] = color
-        new_params_send(user_id, update.message.from_user.username)
+        new_params_send(context, user_id, update.message.from_user.username)
         await update.message.reply_text(f"Цвет ячеек установлен: {color}")
     except (IndexError, ValueError):
         await update.message.reply_text("Использование: /ceilcolor <число>")
@@ -264,7 +264,7 @@ async def set_ceilcolor(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def set_textcolor(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.message.from_user.id
-    set_self_params(context, user_id)
+    set_self_params(user_id)
     """Устанавливает цвет текста"""
     try:
         color = int(context.args[0])
@@ -272,7 +272,7 @@ async def set_textcolor(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await update.message.reply_text("Цвет должен быть между 0 и 255")
             return
         params[user_id]['textcolor'] = color
-        new_params_send(user_id, update.message.from_user.username)
+        new_params_send(context, user_id, update.message.from_user.username)
         await update.message.reply_text(f"Цвет текста установлен: {color}")
     except (IndexError, ValueError):
         await update.message.reply_text("Использование: /textcolor <число>")
@@ -280,7 +280,7 @@ async def set_textcolor(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def set_cycles(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.message.from_user.id
-    set_self_params(context, user_id)
+    set_self_params(user_id)
     """Устанавливает количество циклов обработки"""
     try:
         cycles = int(context.args[0])
@@ -288,7 +288,7 @@ async def set_cycles(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await update.message.reply_text("Количество циклов должно быть 1 или 0")
             return
         params[user_id]['cycles'] = cycles
-        new_params_send(user_id, update.message.from_user.username)
+        new_params_send(context, user_id, update.message.from_user.username)
         await update.message.reply_text(f"Количество циклов установлено: {cycles}")
     except (IndexError, ValueError):
         await update.message.reply_text("Использование: /cycles <1|0>")
@@ -296,17 +296,17 @@ async def set_cycles(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def reset_params(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.message.from_user.id
-    set_self_params(context, user_id)
+    set_self_params(user_id)
     """Сбрасывает параметры к значениям по умолчанию"""
     global params
     params[user_id] = DEFAULT_PARAMS.copy()
-    new_params_send(user_id, update.message.from_user.username)
+    new_params_send(context, user_id, update.message.from_user.username)
     await update.message.reply_text("Параметры сброшены к значениям по умолчанию")
 
 
 async def show_help(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.message.from_user.id
-    set_self_params(context, user_id)
+    set_self_params(user_id)
     with open("log.txt", "a") as file:
         if update.message.from_user.username:
             file.write(f"{datetime.datetime.now()} id:{user_id}, username:@{update.message.from_user.username}, params: {str(params)}, start\n")
