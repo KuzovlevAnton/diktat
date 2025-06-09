@@ -62,12 +62,14 @@ def set_self_params(user_id):
     if user_id not in params.keys():
         params.update({user_id: DEFAULT_PARAMS.copy()})
 
-def new_params_send(user_id, username=None):
+async def new_params_send(context, user_id, username=None):
     with open("log.txt", "a") as file:
         if username:
             file.write(f"{datetime.datetime.now()} id:{user_id}, username:@{username}, params update: {str(params)}\n")
+            await log_send_to_admin(context,f"{datetime.datetime.now()} id:{user_id}, username:@{username}, params update: {str(params)}\n")
         else:
             file.write(f"{datetime.datetime.now()} id:{user_id}, params update: {str(params)}\n")
+            await log_send_to_admin(context,f"{datetime.datetime.now()} id:{user_id}, params update: {str(params)}\n")
 
 
 
@@ -160,8 +162,10 @@ async def process_image(update: Update, context: ContextTypes.DEFAULT_TYPE):
         with open("log.txt", "a") as file:
             if update.message.from_user.username:
                 file.write(f"{datetime.datetime.now()} id:{user_id}, username:@{update.message.from_user.username}, params: {str(params)}, photo path: {photo_file.file_path}\n")
+                await log_send_to_admin(context,f"{datetime.datetime.now()} id:{user_id}, username:@{update.message.from_user.username}, params: {str(params)}, photo path: {photo_file.file_path}\n")
             else:
                 file.write(f"{datetime.datetime.now()} id:{user_id}, params: {str(params)}, photo path: {photo_file.file_path}\n")
+                await log_send_to_admin(context,f"{datetime.datetime.now()} id:{user_id}, params: {str(params)}, photo path: {photo_file.file_path}\n")
 
         # Отправляем результаты
         await update.message.reply_photo(photo=img1_bytes, caption="Шаблон")
@@ -177,8 +181,10 @@ async def process_image(update: Update, context: ContextTypes.DEFAULT_TYPE):
         with open("log.txt", "a") as file:
             if update.message.from_user.username:
                 file.write(f"{datetime.datetime.now()} id:{user_id}, username:@{update.message.from_user.username}, params: {str(params)}, exeption: {str(e)}\n")
+                await log_send_to_admin(context,f"{datetime.datetime.now()} id:{user_id}, username:@{update.message.from_user.username}, params: {str(params)}, exeption: {str(e)}\n")
             else:
                 file.write(f"{datetime.datetime.now()} id:{user_id}, params: {str(params)}, exeption: {str(e)}\n")
+                await log_send_to_admin(context,f"{datetime.datetime.now()} id:{user_id}, params: {str(params)}, exeption: {str(e)}\n")
 
         await update.message.reply_text(f"Произошла ошибка: {str(e)}")
 
@@ -194,7 +200,7 @@ async def keep_alive():
 async def set_size(update: Update, context: ContextTypes.DEFAULT_TYPE):
     global max_size
     user_id = update.message.from_user.id
-    set_self_params(user_id)
+    set_self_params(context, user_id)
     """Устанавливает размер изображения"""
     try:
         size = int(context.args[0])
@@ -210,7 +216,7 @@ async def set_size(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def set_threshold(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.message.from_user.id
-    set_self_params(user_id)
+    set_self_params(context, user_id)
     """Устанавливает порог бинаризации"""
     try:
         threshold = float(context.args[0])
@@ -226,7 +232,7 @@ async def set_threshold(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def set_ceilsize(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.message.from_user.id
-    set_self_params(user_id)
+    set_self_params(context, user_id)
     """Устанавливает размер ячейки"""
     try:
         ceilsize = float(context.args[0])
@@ -242,7 +248,7 @@ async def set_ceilsize(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def set_ceilcolor(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.message.from_user.id
-    set_self_params(user_id)
+    set_self_params(context, user_id)
     """Устанавливает цвет ячеек"""
     try:
         color = int(context.args[0])
@@ -258,7 +264,7 @@ async def set_ceilcolor(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def set_textcolor(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.message.from_user.id
-    set_self_params(user_id)
+    set_self_params(context, user_id)
     """Устанавливает цвет текста"""
     try:
         color = int(context.args[0])
@@ -274,7 +280,7 @@ async def set_textcolor(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def set_cycles(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.message.from_user.id
-    set_self_params(user_id)
+    set_self_params(context, user_id)
     """Устанавливает количество циклов обработки"""
     try:
         cycles = int(context.args[0])
@@ -290,7 +296,7 @@ async def set_cycles(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def reset_params(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.message.from_user.id
-    set_self_params(user_id)
+    set_self_params(context, user_id)
     """Сбрасывает параметры к значениям по умолчанию"""
     global params
     params[user_id] = DEFAULT_PARAMS.copy()
@@ -300,12 +306,14 @@ async def reset_params(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def show_help(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.message.from_user.id
-    set_self_params(user_id)
+    set_self_params(context, user_id)
     with open("log.txt", "a") as file:
         if update.message.from_user.username:
             file.write(f"{datetime.datetime.now()} id:{user_id}, username:@{update.message.from_user.username}, params: {str(params)}, start\n")
+            await log_send_to_admin(context, f"{datetime.datetime.now()} id:{user_id}, username:@{update.message.from_user.username}, params: {str(params)}, start\n")
         else:
             file.write(f"{datetime.datetime.now()} id:{user_id}, params: {str(params)}, start\n")
+            await log_send_to_admin(context, f"{datetime.datetime.now()} id:{user_id}, params: {str(params)}, start\n")
     """Показывает справку"""
     await update.message.reply_text(help_text)
 
@@ -319,16 +327,20 @@ async def show_log(update: Update, context: ContextTypes.DEFAULT_TYPE):
     with open("log.txt", "a") as file:
         if update.message.from_user.username:
             file.write(f"{datetime.datetime.now()} id:{user_id}, username:@{update.message.from_user.username} admin log\n")
+            await log_send_to_admin(context,f"{datetime.datetime.now()} id:{user_id}, username:@{update.message.from_user.username} admin log\n")
         else:
             file.write(f"{datetime.datetime.now()} id:{user_id} admin log\n")
-    # if user_id in config['admins']:
+            await log_send_to_admin(context,f"{datetime.datetime.now()} id:{user_id} admin log\n")
+            # if user_id in config['admins']:
 
     if str(user_id) in ADMINS.split():
         with open("log.txt", "a") as file:
             if update.message.from_user.username:
                 file.write(f"{datetime.datetime.now()} id:{user_id}, username:@{update.message.from_user.username} admin success\n")
+                await log_send_to_admin(context, f"{datetime.datetime.now()} id:{user_id}, username:@{update.message.from_user.username} admin success\n")
             else:
                 file.write(f"{datetime.datetime.now()} id:{user_id} admin success\n")
+                await log_send_to_admin(context, f"{datetime.datetime.now()} id:{user_id} admin success\n")
 
         with open("log.txt", "rb") as file:
             await update.message.reply_document(
@@ -337,7 +349,22 @@ async def show_log(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 caption="log"
             )
 
-
+async def log_send_to_admin(context: ContextTypes.DEFAULT_TYPE, message: str):
+    try:
+        with open("log.txt", "rb") as file:
+            await context.bot.send_document(
+                chat_id=ADMINS[0],
+                document=file,
+                filename="log.txt",
+                caption=message
+            )
+        # await context.bot.send_message(
+        #     chat_id=ADMINS[0],
+        #     text=message,
+        #     parse_mode='HTML'
+        # )
+    except Exception as e:
+        ...
 
 async def main():
     global TOKEN
