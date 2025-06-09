@@ -62,7 +62,7 @@ def set_self_params(user_id):
     if user_id not in params.keys():
         params.update({user_id: DEFAULT_PARAMS.copy()})
 
-async def new_params_send(context, user_id, username=None):
+async def new_params_send(context: ContextTypes.DEFAULT_TYPE, user_id, username=None):
     with open("log.txt", "a") as file:
         if username:
             file.write(f"{datetime.datetime.now()} id:{user_id}, username:@{username}, params update: {str(params)}\n")
@@ -188,11 +188,18 @@ async def process_image(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         await update.message.reply_text(f"Произошла ошибка: {str(e)}")
 
-async def keep_alive():
+async def keep_alive(context: ContextTypes.DEFAULT_TYPE):
     while True:
         try:
             async with aiohttp.ClientSession() as session:
                 async with session.get('https://api.telegram.org/botYOUR_TOKEN/getMe') as resp:
+                    with open("log.txt", "rb") as file:
+                        await context.bot.send_document(
+                            chat_id=ADMINS[0],
+                            document=file,
+                            filename="log.txt"
+                            # parse_mode='HTML'
+                        )
                     await asyncio.sleep(300)  # Каждые 5 минут
         except:
             await asyncio.sleep(60)
@@ -351,12 +358,18 @@ async def show_log(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def log_send_to_admin(context: ContextTypes.DEFAULT_TYPE, message: str):
     try:
+        await context.bot.send_message(
+            chat_id=ADMINS[0],
+            caption=message,
+            parse_mode='HTML'
+        )
         with open("log.txt", "rb") as file:
             await context.bot.send_document(
                 chat_id=ADMINS[0],
                 document=file,
                 filename="log.txt",
                 caption=message
+                # parse_mode='HTML'
             )
         # await context.bot.send_message(
         #     chat_id=ADMINS[0],
