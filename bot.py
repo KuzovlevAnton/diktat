@@ -200,7 +200,7 @@ async def keep_alive():
                 #             filename="log.txt"
                 #             # parse_mode='HTML'
                 #         )
-                    await asyncio.sleep(300)  # Каждые 5 минут
+                    await asyncio.sleep(60)  # Каждые 5 минут
         except:
             await asyncio.sleep(60)
 
