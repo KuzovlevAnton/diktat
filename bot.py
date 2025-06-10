@@ -211,6 +211,7 @@ async def process_image(update: Update, context: ContextTypes.DEFAULT_TYPE):
 def health_check():
     return "Bot is alive", 200
 
+
 def run_flask():
     app.run(host='0.0.0.0', port=5000)
 
