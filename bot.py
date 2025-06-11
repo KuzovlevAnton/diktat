@@ -381,7 +381,7 @@ async def show_log(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def log_send_to_admin(context: ContextTypes.DEFAULT_TYPE, message: str):
     try:
-        print(int(ADMINS.split()[0]))
+        # print(int(ADMINS.split()[0]))
         # await context.bot.send_message(
         #     chat_id=int(ADMINS.split()[0]),
         #     text=message,
