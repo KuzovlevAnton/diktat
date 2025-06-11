@@ -19,7 +19,8 @@ class Disk:
         responce = requests.get(f"{url}?path={disk_path}&overwrite=True", headers=self.headers__)
 
         with open(computer_path, 'rb') as f:
-            requests.put(f"{responce.json()["href"]}?path={disk_path}", files={'file': f})
+            link = responce.json()["href"]
+            requests.put(f"{link}?path={disk_path}", files={'file': f})
         return responce.json()["href"]
 
     def download(self, disk_path, computer_path, filename):
