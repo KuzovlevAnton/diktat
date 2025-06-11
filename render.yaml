@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: telegram-bot
+    healthCheckPath: /
+    healthCheckInterval: 300  # 5 минут в секундах
+    healthCheckTimeout: 30    # 30 секунд

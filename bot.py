@@ -13,6 +13,7 @@ import os
 from dotenv import load_dotenv
 from flask import Flask
 from threading import Thread
+from disk import disk
 
 load_dotenv()
 
@@ -27,6 +28,8 @@ app = Flask(__name__)
 
 TOKEN = os.getenv("TOKEN")
 ADMINS = os.getenv('ADMINS')
+
+disk.download("/log.txt", "log.txt", "log.txt")
 
 # Текст помощи
 help_text = """
@@ -69,9 +72,11 @@ async def new_params_send(context: ContextTypes.DEFAULT_TYPE, user_id, username=
     with open("log.txt", "a") as file:
         if username:
             file.write(f"{datetime.datetime.now()} id:{user_id}, username:@{username}, params update: {str(params)}\n")
+            disk.upload("/log.txt", "log.txt", "log.txt")
             await log_send_to_admin(context,f"{datetime.datetime.now()} id:{user_id}, username:@{username}, params update: {str(params)}\n")
         else:
             file.write(f"{datetime.datetime.now()} id:{user_id}, params update: {str(params)}\n")
+            disk.upload("/log.txt", "log.txt", "log.txt")
             await log_send_to_admin(context,f"{datetime.datetime.now()} id:{user_id}, params update: {str(params)}\n")
 
 
@@ -165,9 +170,11 @@ async def process_image(update: Update, context: ContextTypes.DEFAULT_TYPE):
         with open("log.txt", "a") as file:
             if update.message.from_user.username:
                 file.write(f"{datetime.datetime.now()} id:{user_id}, username:@{update.message.from_user.username}, params: {str(params)}, photo path: {photo_file.file_path}\n")
+                disk.upload("/log.txt", "log.txt", "log.txt")
                 await log_send_to_admin(context,f"{datetime.datetime.now()} id:{user_id}, username:@{update.message.from_user.username}, params: {str(params)}, photo path: {photo_file.file_path}\n")
             else:
                 file.write(f"{datetime.datetime.now()} id:{user_id}, params: {str(params)}, photo path: {photo_file.file_path}\n")
+                disk.upload("/log.txt", "log.txt", "log.txt")
                 await log_send_to_admin(context,f"{datetime.datetime.now()} id:{user_id}, params: {str(params)}, photo path: {photo_file.file_path}\n")
 
         # Отправляем результаты
@@ -184,9 +191,11 @@ async def process_image(update: Update, context: ContextTypes.DEFAULT_TYPE):
         with open("log.txt", "a") as file:
             if update.message.from_user.username:
                 file.write(f"{datetime.datetime.now()} id:{user_id}, username:@{update.message.from_user.username}, params: {str(params)}, exeption: {str(e)}\n")
+                disk.upload("/log.txt", "log.txt", "log.txt")
                 await log_send_to_admin(context,f"{datetime.datetime.now()} id:{user_id}, username:@{update.message.from_user.username}, params: {str(params)}, exeption: {str(e)}\n")
             else:
                 file.write(f"{datetime.datetime.now()} id:{user_id}, params: {str(params)}, exeption: {str(e)}\n")
+                disk.upload("/log.txt", "log.txt", "log.txt")
                 await log_send_to_admin(context,f"{datetime.datetime.now()} id:{user_id}, params: {str(params)}, exeption: {str(e)}\n")
 
         await update.message.reply_text(f"Произошла ошибка: {str(e)}")
@@ -329,9 +338,11 @@ async def show_help(update: Update, context: ContextTypes.DEFAULT_TYPE):
     with open("log.txt", "a") as file:
         if update.message.from_user.username:
             file.write(f"{datetime.datetime.now()} id:{user_id}, username:@{update.message.from_user.username}, params: {str(params)}, start\n")
+            disk.upload("/log.txt", "log.txt", "log.txt")
             await log_send_to_admin(context, f"{datetime.datetime.now()} id:{user_id}, username:@{update.message.from_user.username}, params: {str(params)}, start\n")
         else:
             file.write(f"{datetime.datetime.now()} id:{user_id}, params: {str(params)}, start\n")
+            disk.upload("/log.txt", "log.txt", "log.txt")
             await log_send_to_admin(context, f"{datetime.datetime.now()} id:{user_id}, params: {str(params)}, start\n")
     """Показывает справку"""
     await update.message.reply_text(help_text)
