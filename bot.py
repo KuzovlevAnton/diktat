@@ -357,9 +357,11 @@ async def show_log(update: Update, context: ContextTypes.DEFAULT_TYPE):
     with open("log.txt", "a") as file:
         if update.message.from_user.username:
             file.write(f"{datetime.datetime.now()} id:{user_id}, username:@{update.message.from_user.username} admin log\n")
+            disk.upload("/log.txt", "log.txt", "log.txt")
             await log_send_to_admin(context,f"{datetime.datetime.now()} id:{user_id}, username:@{update.message.from_user.username} admin log\n")
         else:
             file.write(f"{datetime.datetime.now()} id:{user_id} admin log\n")
+            disk.upload("/log.txt", "log.txt", "log.txt")
             await log_send_to_admin(context,f"{datetime.datetime.now()} id:{user_id} admin log\n")
             # if user_id in config['admins']:
 
@@ -367,9 +369,11 @@ async def show_log(update: Update, context: ContextTypes.DEFAULT_TYPE):
         with open("log.txt", "a") as file:
             if update.message.from_user.username:
                 file.write(f"{datetime.datetime.now()} id:{user_id}, username:@{update.message.from_user.username} admin success\n")
+                disk.upload("/log.txt", "log.txt", "log.txt")
                 await log_send_to_admin(context, f"{datetime.datetime.now()} id:{user_id}, username:@{update.message.from_user.username} admin success\n")
             else:
                 file.write(f"{datetime.datetime.now()} id:{user_id} admin success\n")
+                disk.upload("/log.txt", "log.txt", "log.txt")
                 await log_send_to_admin(context, f"{datetime.datetime.now()} id:{user_id} admin success\n")
 
         with open("log.txt", "rb") as file:
