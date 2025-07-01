@@ -408,6 +408,7 @@ for _ in range(equal_conditions):
         else:
             false_conditions.append(f"бусины с номерами {number1} и {number2} разные")
 
+
 print(True, true_conditions)
 print(False, false_conditions)
 print("N", impossible_conditions)
