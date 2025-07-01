@@ -383,12 +383,14 @@ for _ in range(equal_conditions):
             if len(set(figures)) != len(figures):
                 while figures.count(figures[number1 - 1]) <= 1:
                     number1 = randint(1, len(figures))
-
+                number2 = randint(1, len(figures))
+                while figures[number2-1] != figures[number1-1]:
+                    number2 = randint(1, len(figures))
             #         одинаковые
+                true_conditions.append(f"бусины с номерами {number1} и {number2} одинаковые")
             else:
                 number2 = randint(1, len(figures))
-        #         разные
-
+                true_conditions.append(f"бусины с номерами {number1} и {number2} разные")
         else:
             number1 = randint(1, len(figures))
             number2 = number1
