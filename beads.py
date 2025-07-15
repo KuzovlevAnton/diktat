@@ -8,6 +8,7 @@ import math
 
 
 
+
 def beads_processing(length=10, order_conditions=5,relative_order_conditions=5 ,content_conditions=5, equal_conditions=5, true_probability=0.5, bordersize=100, offset=200, end=100, size=100, between_dist_relative=1, levelsize=300):
     h = 3508
     w = 2480
