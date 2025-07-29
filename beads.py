@@ -497,7 +497,7 @@ def beads_processing(length=10, order_conditions=5,relative_order_conditions=5 ,
         else:
             answers.append("Н")
 
-    print(answers)
+    return answers
 
     # image1 = Image.open("newimage.png")
     # im1 = image1.convert('RGB')
@@ -505,4 +505,4 @@ def beads_processing(length=10, order_conditions=5,relative_order_conditions=5 ,
     # image1.addPage("newimage.pdf")
 
 
-beads_processing()
+print(*beads_processing())
