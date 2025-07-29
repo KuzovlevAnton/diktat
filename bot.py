@@ -318,7 +318,7 @@ async def set_size(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def set_threshold(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.message.from_user.id
     set_self_params(user_id)
-    """Устанавливает порог бинаризации"""
+    """Устанавливает порог"""
     try:
         threshold = float(context.args[0])
         if threshold < 0 or threshold > 1:
@@ -419,7 +419,7 @@ async def set_order(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
         order = int(context.args[0])
         if order < 0 or order > 100:
-            await update.message.reply_text(f"Количество условий на порядок должно быть между 0 и {1000}")
+            await update.message.reply_text(f"Количество условий на порядок должно быть между 0 и {100}")
             return
         params[user_id]['order'] = order
         await new_params_send(context, user_id, update.message.from_user.username)
@@ -435,7 +435,7 @@ async def set_relative(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
         relative = int(context.args[0])
         if relative < 0 or relative > 100:
-            await update.message.reply_text(f"Количество условий на относительный порядок должно быть между 0 и {1000}")
+            await update.message.reply_text(f"Количество условий на относительный порядок должно быть между 0 и {100}")
             return
         params[user_id]['relative'] = relative
         await new_params_send(context, user_id, update.message.from_user.username)
@@ -451,7 +451,7 @@ async def set_content(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
         content = int(context.args[0])
         if content < 0 or content > 100:
-            await update.message.reply_text(f"Количество условий на содержание должно быть между 0 и {1000}")
+            await update.message.reply_text(f"Количество условий на содержание должно быть между 0 и {100}")
             return
         params[user_id]['content'] = content
         await new_params_send(context, user_id, update.message.from_user.username)
@@ -467,7 +467,7 @@ async def set_equal(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
         equal = int(context.args[0])
         if equal < 0 or equal > 100:
-            await update.message.reply_text(f"Количество условий на равенство должно быть между 0 и {1000}")
+            await update.message.reply_text(f"Количество условий на равенство должно быть между 0 и {100}")
             return
         params[user_id]['equal'] = equal
         await new_params_send(context, user_id, update.message.from_user.username)
@@ -479,7 +479,7 @@ async def set_equal(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def set_true(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.message.from_user.id
     set_self_params(user_id)
-    """Устанавливает порог бинаризации"""
+    """Устанавливает порог истинности"""
     try:
         true = float(context.args[0])
         if true < 0 or true > 1:
@@ -490,6 +490,70 @@ async def set_true(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(f"Доля истинности установлена: {true}")
     except (IndexError, ValueError):
         await update.message.reply_text("Использование: /true <дробное число от 0 до 1>")
+
+
+async def set_colornames(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = update.message.from_user.id
+    set_self_params(user_id)
+    """Устанавливает количество циклов обработки"""
+    try:
+        colornames = int(context.args[0])
+        if colornames not in (1, 0):
+            await update.message.reply_text("Использование названий цветов должно быть 1 или 0")
+            return
+        params[user_id]['colornames'] = colornames
+        await new_params_send(context, user_id, update.message.from_user.username)
+        await update.message.reply_text(f"Использование названий цветов установлено: {colornames}")
+    except (IndexError, ValueError):
+        await update.message.reply_text("Использование: /colornames <1|0>")
+
+
+async def set_bordersize(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = update.message.from_user.id
+    set_self_params(user_id)
+    """Устанавливает размер изображения"""
+    try:
+        bordersize = int(context.args[0])
+        if bordersize < 0 or bordersize > 1000:
+            await update.message.reply_text(f"Размер полей должен быть между 0 и {1000}")
+            return
+        params[user_id]['bordersize'] = bordersize
+        await new_params_send(context, user_id, update.message.from_user.username)
+        await update.message.reply_text(f"Количество условий на равенство установлено: {bordersize}")
+    except (IndexError, ValueError):
+        await update.message.reply_text("Использование: /bordersize <число>")
+
+
+async def set_offset(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = update.message.from_user.id
+    set_self_params(user_id)
+    """Устанавливает размер изображения"""
+    try:
+        offset = int(context.args[0])
+        if offset < 0 or offset > 1000:
+            await update.message.reply_text(f"Отступ должен быть между 0 и {1000}")
+            return
+        params[user_id]['offset'] = offset
+        await new_params_send(context, user_id, update.message.from_user.username)
+        await update.message.reply_text(f"Отступ установленен: {offset}")
+    except (IndexError, ValueError):
+        await update.message.reply_text("Использование: /offset  <число>")
+
+
+async def set_end(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = update.message.from_user.id
+    set_self_params(user_id)
+    """Устанавливает размер изображения"""
+    try:
+        end = int(context.args[0])
+        if end < 0 or end > 1000:
+            await update.message.reply_text(f"Отступ с конца должен быть между 0 и {1000}")
+            return
+        params[user_id]['end'] = end
+        await new_params_send(context, user_id, update.message.from_user.username)
+        await update.message.reply_text(f"Отступ с конца установленен: {end}")
+    except (IndexError, ValueError):
+        await update.message.reply_text("Использование: /end <число>")
 
 
 async def reset_params(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -609,10 +673,10 @@ async def main():
     application.add_handler(CommandHandler("content", set_content))
     application.add_handler(CommandHandler("equal", set_equal))
     application.add_handler(CommandHandler("true", set_true))
-    # application.add_handler(CommandHandler("colornames", set_colornames))
-    # application.add_handler(CommandHandler("bordersize", set_bordersize))
-    # application.add_handler(CommandHandler("offset", set_offset))
-    # application.add_handler(CommandHandler("end", set_end))
+    application.add_handler(CommandHandler("colornames", set_colornames))
+    application.add_handler(CommandHandler("bordersize", set_bordersize))
+    application.add_handler(CommandHandler("offset", set_offset))
+    application.add_handler(CommandHandler("end", set_end))
     # application.add_handler(CommandHandler("beadsize", set_beadsize))
     # application.add_handler(CommandHandler("distance", set_distance))
     # application.add_handler(CommandHandler("levelsize", set_levelsize))
