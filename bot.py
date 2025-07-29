@@ -6,6 +6,7 @@ from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, ContextTypes
 from telegram.ext import filters
 import datetime
+from beads import beads_processing
 from processing import processing
 import json
 import asyncio
@@ -18,6 +19,7 @@ from disk import disk
 load_dotenv()
 
 max_size = 100
+max_length = 1000
 
 app = Flask(__name__)
 
@@ -55,7 +57,21 @@ DEFAULT_PARAMS = {
     'ceilsize': 1,
     'ceilcolor': 200,
     'textcolor': 200,
-    'cycles': 1
+    'cycles': 1,
+
+    'length': 10,
+    'order': 5,
+    'relative': 5,
+    'content': 5,
+    'equal': 5,
+    'true': 0.5,
+    'colornames': 0,
+    'bordersize': 100,
+    'offset': 200,
+    'end': 100,
+    'beadsize': 100,
+    'distance': 1,
+    'levelsize': 300
 }
 
 
@@ -200,6 +216,93 @@ async def process_image(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         await update.message.reply_text(f"Произошла ошибка: {str(e)}")
 
+
+async def beads(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = update.message.from_user.id
+    set_self_params(user_id)
+
+    answers = str(beads_processing(
+                params[user_id]['length'],
+                params[user_id]['order'],
+                params[user_id]['relative'],
+                params[user_id]['content'],
+                params[user_id]['equal'],
+                params[user_id]['true'],
+                params[user_id]['colornames'],
+                params[user_id]['bordersize'],
+                params[user_id]['offset'],
+                params[user_id]['end'],
+                params[user_id]['beadsize'],
+                params[user_id]['distance'],
+                params[user_id]['levelsize']
+            )).replace("[", "").replace("]", "").replace(",", "")
+    
+
+
+        # лог доделать !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        # лог доделать !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        # лог доделать !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        # лог доделать !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        # лог доделать !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        # лог доделать !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        # лог доделать !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        # лог доделать !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        # лог доделать !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        # лог доделать !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        # лог доделать !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        # лог доделать !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        # лог доделать !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        # лог доделать !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        # лог доделать !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        # лог доделать !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        # лог доделать !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        # лог доделать !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        # лог доделать !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        # лог доделать !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        # лог доделать !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        # лог доделать !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        # лог доделать !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        # лог доделать !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        # лог доделать !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        # лог доделать !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        # лог доделать !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        # лог доделать !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        # лог доделать !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        
+        # with open("log.txt", "a") as file:
+        #     if update.message.from_user.username:
+        #         file.write(f"{datetime.datetime.now()} id:{user_id}, username:@{update.message.from_user.username}, params: {str(params)}, photo path: {photo_file.file_path}\n")
+        #         disk.upload("/log.txt", "log.txt", "log.txt")
+        #         await log_send_to_admin(context,f"{datetime.datetime.now()} id:{user_id}, username:@{update.message.from_user.username}, params: {str(params)}, photo path: {photo_file.file_path}\n")
+        #     else:
+        #         file.write(f"{datetime.datetime.now()} id:{user_id}, params: {str(params)}, photo path: {photo_file.file_path}\n")
+        #         disk.upload("/log.txt", "log.txt", "log.txt")
+        #         await log_send_to_admin(context,f"{datetime.datetime.now()} id:{user_id}, params: {str(params)}, photo path: {photo_file.file_path}\n")
+
+        # await update.message.reply_photo(photo=img1_bytes, caption="Шаблон")
+    
+
+    with open("newimage.pdf", "rb") as file:
+        await update.message.reply_document(
+            document=file,
+            filename="result.pdf",
+            caption="Цепочка"
+            # parse_mode='HTML'
+        )
+
+
+    # except Exception as e:
+    #     with open("log.txt", "a") as file:
+    #         if update.message.from_user.username:
+    #             file.write(f"{datetime.datetime.now()} id:{user_id}, username:@{update.message.from_user.username}, params: {str(params)}, exeption: {str(e)}\n")
+    #             disk.upload("/log.txt", "log.txt", "log.txt")
+    #             await log_send_to_admin(context,f"{datetime.datetime.now()} id:{user_id}, username:@{update.message.from_user.username}, params: {str(params)}, exeption: {str(e)}\n")
+    #         else:
+    #             file.write(f"{datetime.datetime.now()} id:{user_id}, params: {str(params)}, exeption: {str(e)}\n")
+    #             disk.upload("/log.txt", "log.txt", "log.txt")
+    #             await log_send_to_admin(context,f"{datetime.datetime.now()} id:{user_id}, params: {str(params)}, exeption: {str(e)}\n")
+
+
 # async def keep_alive():
 #     while True:
 #         try:
@@ -322,6 +425,109 @@ async def set_cycles(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text("Использование: /cycles <1|0>")
 
 
+
+async def set_length(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    global max_length
+    user_id = update.message.from_user.id
+    set_self_params(user_id)
+    """Устанавливает размер изображения"""
+    try:
+        length = int(context.args[0])
+        if length < 2 or length > max_length:
+            await update.message.reply_text(f"Длина цепочки должна быть между 2 и {max_length}")
+            return
+        params[user_id]['length'] = length
+        await new_params_send(context, user_id, update.message.from_user.username)
+        await update.message.reply_text(f"Длина цепочки установлена: {length}")
+    except (IndexError, ValueError):
+        await update.message.reply_text("Использование: /length <число>")
+
+
+
+async def set_order(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = update.message.from_user.id
+    set_self_params(user_id)
+    """Устанавливает размер изображения"""
+    try:
+        order = int(context.args[0])
+        if order < 0 or order > 1000:
+            await update.message.reply_text(f"Количество условий на порядок должно быть между 0 и {1000}")
+            return
+        params[user_id]['order'] = order
+        await new_params_send(context, user_id, update.message.from_user.username)
+        await update.message.reply_text(f"Количество условий на порядок установлено: {order}")
+    except (IndexError, ValueError):
+        await update.message.reply_text("Использование: /order <число>")
+
+
+
+async def set_relative(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = update.message.from_user.id
+    set_self_params(user_id)
+    """Устанавливает размер изображения"""
+    try:
+        relative = int(context.args[0])
+        if relative < 0 or relative > 1000:
+            await update.message.reply_text(f"Количество условий на относительный порядок должно быть между 0 и {1000}")
+            return
+        params[user_id]['relative'] = relative
+        await new_params_send(context, user_id, update.message.from_user.username)
+        await update.message.reply_text(f"Количество условий на относительный порядок установлено: {relative}")
+    except (IndexError, ValueError):
+        await update.message.reply_text("Использование: /relative <число>")
+
+
+
+async def set_content(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = update.message.from_user.id
+    set_self_params(user_id)
+    """Устанавливает размер изображения"""
+    try:
+        content = int(context.args[0])
+        if content < 0 or content > 1000:
+            await update.message.reply_text(f"Количество условий на содержание должно быть между 0 и {1000}")
+            return
+        params[user_id]['content'] = content
+        await new_params_send(context, user_id, update.message.from_user.username)
+        await update.message.reply_text(f"Количество условий на содержание установлено: {content}")
+    except (IndexError, ValueError):
+        await update.message.reply_text("Использование: /content <число>")
+
+
+
+async def set_equal(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = update.message.from_user.id
+    set_self_params(user_id)
+    """Устанавливает размер изображения"""
+    try:
+        equal = int(context.args[0])
+        if equal < 0 or equal > 1000:
+            await update.message.reply_text(f"Количество условий на равенство должно быть между 0 и {1000}")
+            return
+        params[user_id]['equal'] = equal
+        await new_params_send(context, user_id, update.message.from_user.username)
+        await update.message.reply_text(f"Количество условий на равенство установлено: {equal}")
+    except (IndexError, ValueError):
+        await update.message.reply_text("Использование: /equal <число>")
+
+
+
+async def set_true(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = update.message.from_user.id
+    set_self_params(user_id)
+    """Устанавливает порог бинаризации"""
+    try:
+        true = float(context.args[0])
+        if true < 0 or true > 1:
+            await update.message.reply_text("Доля истинности должна быть между 0 и 1")
+            return
+        params[user_id]['true'] = true
+        await new_params_send(context, user_id, update.message.from_user.username)
+        await update.message.reply_text(f"Доля истинности установлена: {true}")
+    except (IndexError, ValueError):
+        await update.message.reply_text("Использование: /true <дробное число от 0 до 1>")
+
+
 async def reset_params(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.message.from_user.id
     set_self_params(user_id)
@@ -424,6 +630,23 @@ async def main():
     application.add_handler(CommandHandler("help", show_help))
     application.add_handler(CommandHandler("start", show_help))
     application.add_handler(CommandHandler("log", show_log))
+
+
+
+    application.add_handler(CommandHandler("length", set_length))
+    application.add_handler(CommandHandler("order", set_order))
+    application.add_handler(CommandHandler("relative", set_relative))
+    application.add_handler(CommandHandler("content", set_content))
+    application.add_handler(CommandHandler("equal", set_equal))
+    application.add_handler(CommandHandler("true", set_true))
+    # application.add_handler(CommandHandler("colornames", set_colornames))
+    # application.add_handler(CommandHandler("bordersize", set_bordersize))
+    # application.add_handler(CommandHandler("offset", set_offset))
+    # application.add_handler(CommandHandler("end", set_end))
+    # application.add_handler(CommandHandler("beadsize", set_beadsize))
+    # application.add_handler(CommandHandler("distance", set_distance))
+    # application.add_handler(CommandHandler("levelsize", set_levelsize))
+    application.add_handler(CommandHandler("beads", beads))
 
     # Обработчик изображений
     application.add_handler(MessageHandler(filters.PHOTO, process_image))
