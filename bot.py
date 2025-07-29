@@ -6,6 +6,7 @@ from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, ContextTypes
 from telegram.ext import filters
 import datetime
+from beads import beads_processing
 from processing import processing
 import json
 import asyncio
@@ -18,6 +19,7 @@ from disk import disk
 load_dotenv()
 
 max_size = 100
+max_length = 1000
 
 app = Flask(__name__)
 
@@ -55,72 +57,86 @@ DEFAULT_PARAMS = {
     'ceilsize': 1,
     'ceilcolor': 200,
     'textcolor': 200,
-    'cycles': 1
-}
+    'cycles': 1,
 
+    'length': 10,
+    'order': 5,
+    'relative': 5,
+    'content': 5,
+    'equal': 5,
+    'true': 0.5,
+    'colornames': 0,
+    'bordersize': 100,
+    'offset': 200,
+    'end': 100,
+    'beadsize': 100,
+    'distance': 1,
+    'levelsize': 300
+}
 
 # Глобальные параметры (будут изменяться командами)
 # params = DEFAULT_PARAMS.copy()
 params = {}
+
 
 def set_self_params(user_id):
     global params, DEFAULT_PARAMS
     if user_id not in params.keys():
         params.update({user_id: DEFAULT_PARAMS.copy()})
 
+
 async def new_params_send(context: ContextTypes.DEFAULT_TYPE, user_id, username=None):
     with open("log.txt", "a") as file:
         if username:
             file.write(f"{datetime.datetime.now()} id:{user_id}, username:@{username}, params update: {str(params)}\n")
             disk.upload("/log.txt", "log.txt", "log.txt")
-            await log_send_to_admin(context,f"{datetime.datetime.now()} id:{user_id}, username:@{username}, params update: {str(params)}\n")
+            await log_send_to_admin(context,
+                                    f"{datetime.datetime.now()} id:{user_id}, username:@{username}, params update: {str(params)}\n")
         else:
             file.write(f"{datetime.datetime.now()} id:{user_id}, params update: {str(params)}\n")
             disk.upload("/log.txt", "log.txt", "log.txt")
-            await log_send_to_admin(context,f"{datetime.datetime.now()} id:{user_id}, params update: {str(params)}\n")
-
-
+            await log_send_to_admin(context, f"{datetime.datetime.now()} id:{user_id}, params update: {str(params)}\n")
 
 
 # async def apply_operations(image, current_params):
-    # """Применяет операции к изображению и возвращает 2 изображения и текст"""
-    # # Конвертируем в numpy array
-    # img_array = numpy.array(image)
-    #
-    # # Преобразуем в чёрно-белый
-    # gray = cv2.cvtColor(img_array, cv2.COLOR_BGR2GRAY)
-    #
-    # # Применяем порог бинаризации
-    # _, binary = cv2.threshold(gray, current_params['threshold'], 255, cv2.THRESH_BINARY)
-    #
-    # # Изменяем размер
-    # resized = cv2.resize(binary, (current_params['size'], current_params['size']), interpolation=cv2.INTER_AREA)
-    #
-    # # Первое изображение - просто чёрно-белое
-    # image1 = Image.fromarray(resized)
-    #
-    # # Второе изображение - с сеткой
-    # image2 = image1.copy()
-    # draw = ImageDraw.Draw(image2)
-    #
-    # # Рисуем сетку
-    # ceil_size = current_params['ceilsize']
-    # width, height = image2.size
-    #
-    # # Цвет сетки
-    # grid_color = 0 if current_params['ceilcolor'] == 'black' else 255
-    #
-    # for x in range(0, width, ceil_size):
-    #     draw.line([(x, 0), (x, height)], fill=grid_color)
-    # for y in range(0, height, ceil_size):
-    #     draw.line([(0, y), (width, y)], fill=grid_color)
-    #
-    # # Генерируем текст с параметрами
-    # text = f"Параметры:\nРазмер: {current_params['size']}\nПорог: {current_params['threshold']}\n"
-    # text += f"Размер ячейки: {current_params['ceilsize']}\nЦвет ячейки: {current_params['ceilcolor']}\n"
-    # text += f"Цвет текста: {current_params['textcolor']}\nЦиклы: {current_params['cycles']}"
+# """Применяет операции к изображению и возвращает 2 изображения и текст"""
+# # Конвертируем в numpy array
+# img_array = numpy.array(image)
+#
+# # Преобразуем в чёрно-белый
+# gray = cv2.cvtColor(img_array, cv2.COLOR_BGR2GRAY)
+#
+# # Применяем порог бинаризации
+# _, binary = cv2.threshold(gray, current_params['threshold'], 255, cv2.THRESH_BINARY)
+#
+# # Изменяем размер
+# resized = cv2.resize(binary, (current_params['size'], current_params['size']), interpolation=cv2.INTER_AREA)
+#
+# # Первое изображение - просто чёрно-белое
+# image1 = Image.fromarray(resized)
+#
+# # Второе изображение - с сеткой
+# image2 = image1.copy()
+# draw = ImageDraw.Draw(image2)
+#
+# # Рисуем сетку
+# ceil_size = current_params['ceilsize']
+# width, height = image2.size
+#
+# # Цвет сетки
+# grid_color = 0 if current_params['ceilcolor'] == 'black' else 255
+#
+# for x in range(0, width, ceil_size):
+#     draw.line([(x, 0), (x, height)], fill=grid_color)
+# for y in range(0, height, ceil_size):
+#     draw.line([(0, y), (width, y)], fill=grid_color)
+#
+# # Генерируем текст с параметрами
+# text = f"Параметры:\nРазмер: {current_params['size']}\nПорог: {current_params['threshold']}\n"
+# text += f"Размер ячейки: {current_params['ceilsize']}\nЦвет ячейки: {current_params['ceilcolor']}\n"
+# text += f"Цвет текста: {current_params['textcolor']}\nЦиклы: {current_params['cycles']}"
 
-    # return image1, image2, text
+# return image1, image2, text
 
 
 # async def process_image(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -149,7 +165,6 @@ async def process_image(update: Update, context: ContextTypes.DEFAULT_TYPE):
             bool(params[user_id]['cycles'])
         )
 
-
         # image1, image2, text = processing(image, params['size'], params['thereshold'], params['ceilsize'], params['ceilcolor'], params['textcolor'], params['cycles'])
 
         # # Применяем операции несколько раз (по количеству cycles)
@@ -166,16 +181,19 @@ async def process_image(update: Update, context: ContextTypes.DEFAULT_TYPE):
         image2.save(img2_bytes, format='PNG')
         img2_bytes.seek(0)
 
-
         with open("log.txt", "a") as file:
             if update.message.from_user.username:
-                file.write(f"{datetime.datetime.now()} id:{user_id}, username:@{update.message.from_user.username}, params: {str(params)}, photo path: {photo_file.file_path}\n")
+                file.write(
+                    f"{datetime.datetime.now()} id:{user_id}, username:@{update.message.from_user.username}, params: {str(params)}, photo path: {photo_file.file_path}\n")
                 disk.upload("/log.txt", "log.txt", "log.txt")
-                await log_send_to_admin(context,f"{datetime.datetime.now()} id:{user_id}, username:@{update.message.from_user.username}, params: {str(params)}, photo path: {photo_file.file_path}\n")
+                await log_send_to_admin(context,
+                                        f"{datetime.datetime.now()} id:{user_id}, username:@{update.message.from_user.username}, params: {str(params)}, photo path: {photo_file.file_path}\n")
             else:
-                file.write(f"{datetime.datetime.now()} id:{user_id}, params: {str(params)}, photo path: {photo_file.file_path}\n")
+                file.write(
+                    f"{datetime.datetime.now()} id:{user_id}, params: {str(params)}, photo path: {photo_file.file_path}\n")
                 disk.upload("/log.txt", "log.txt", "log.txt")
-                await log_send_to_admin(context,f"{datetime.datetime.now()} id:{user_id}, params: {str(params)}, photo path: {photo_file.file_path}\n")
+                await log_send_to_admin(context,
+                                        f"{datetime.datetime.now()} id:{user_id}, params: {str(params)}, photo path: {photo_file.file_path}\n")
 
         # Отправляем результаты
         await update.message.reply_photo(photo=img1_bytes, caption="Шаблон")
@@ -190,15 +208,70 @@ async def process_image(update: Update, context: ContextTypes.DEFAULT_TYPE):
     except Exception as e:
         with open("log.txt", "a") as file:
             if update.message.from_user.username:
-                file.write(f"{datetime.datetime.now()} id:{user_id}, username:@{update.message.from_user.username}, params: {str(params)}, exeption: {str(e)}\n")
+                file.write(
+                    f"{datetime.datetime.now()} id:{user_id}, username:@{update.message.from_user.username}, params: {str(params)}, exeption: {str(e)}\n")
                 disk.upload("/log.txt", "log.txt", "log.txt")
-                await log_send_to_admin(context,f"{datetime.datetime.now()} id:{user_id}, username:@{update.message.from_user.username}, params: {str(params)}, exeption: {str(e)}\n")
+                await log_send_to_admin(context,
+                                        f"{datetime.datetime.now()} id:{user_id}, username:@{update.message.from_user.username}, params: {str(params)}, exeption: {str(e)}\n")
             else:
                 file.write(f"{datetime.datetime.now()} id:{user_id}, params: {str(params)}, exeption: {str(e)}\n")
                 disk.upload("/log.txt", "log.txt", "log.txt")
-                await log_send_to_admin(context,f"{datetime.datetime.now()} id:{user_id}, params: {str(params)}, exeption: {str(e)}\n")
+                await log_send_to_admin(context,
+                                        f"{datetime.datetime.now()} id:{user_id}, params: {str(params)}, exeption: {str(e)}\n")
 
         await update.message.reply_text(f"Произошла ошибка: {str(e)}")
+
+
+async def beads(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = update.message.from_user.id
+    set_self_params(user_id)
+
+    answers = str(beads_processing(
+        params[user_id]['length'],
+        params[user_id]['order'],
+        params[user_id]['relative'],
+        params[user_id]['content'],
+        params[user_id]['equal'],
+        params[user_id]['true'],
+        params[user_id]['colornames'],
+        params[user_id]['bordersize'],
+        params[user_id]['offset'],
+        params[user_id]['end'],
+        params[user_id]['beadsize'],
+        params[user_id]['distance'],
+        params[user_id]['levelsize']
+    )).replace("[", "").replace("]", "").replace(",", "").replace("\'", "")
+
+    with open("log.txt", "a") as file:
+        if update.message.from_user.username:
+            file.write(f"{datetime.datetime.now()} id:{user_id}, username:@{update.message.from_user.username}, params: {str(params)} beads\n")
+            disk.upload("/log.txt", "log.txt", "log.txt")
+            await log_send_to_admin(context,f"{datetime.datetime.now()} id:{user_id}, username:@{update.message.from_user.username}, params: {str(params)} beads\n")
+        else:
+            file.write(f"{datetime.datetime.now()} id:{user_id}, params: {str(params)} beads\n")
+            disk.upload("/log.txt", "log.txt", "log.txt")
+            await log_send_to_admin(context,f"{datetime.datetime.now()} id:{user_id}, params: {str(params)} beads\n")
+
+
+    with open("newimage.pdf", "rb") as file:
+        await update.message.reply_document(
+            document=file,
+            filename="result.pdf",
+            caption=f"Ответы: {answers}"
+            # parse_mode='HTML'
+        )
+
+    # except Exception as e:
+    #     with open("log.txt", "a") as file:
+    #         if update.message.from_user.username:
+    #             file.write(f"{datetime.datetime.now()} id:{user_id}, username:@{update.message.from_user.username}, params: {str(params)}, exeption: {str(e)}\n")
+    #             disk.upload("/log.txt", "log.txt", "log.txt")
+    #             await log_send_to_admin(context,f"{datetime.datetime.now()} id:{user_id}, username:@{update.message.from_user.username}, params: {str(params)}, exeption: {str(e)}\n")
+    #         else:
+    #             file.write(f"{datetime.datetime.now()} id:{user_id}, params: {str(params)}, exeption: {str(e)}\n")
+    #             disk.upload("/log.txt", "log.txt", "log.txt")
+    #             await log_send_to_admin(context,f"{datetime.datetime.now()} id:{user_id}, params: {str(params)}, exeption: {str(e)}\n")
+
 
 # async def keep_alive():
 #     while True:
@@ -322,6 +395,103 @@ async def set_cycles(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text("Использование: /cycles <1|0>")
 
 
+async def set_length(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    global max_length
+    user_id = update.message.from_user.id
+    set_self_params(user_id)
+    """Устанавливает размер изображения"""
+    try:
+        length = int(context.args[0])
+        if length < 2 or length > max_length:
+            await update.message.reply_text(f"Длина цепочки должна быть между 2 и {max_length}")
+            return
+        params[user_id]['length'] = length
+        await new_params_send(context, user_id, update.message.from_user.username)
+        await update.message.reply_text(f"Длина цепочки установлена: {length}")
+    except (IndexError, ValueError):
+        await update.message.reply_text("Использование: /length <число>")
+
+
+async def set_order(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = update.message.from_user.id
+    set_self_params(user_id)
+    """Устанавливает размер изображения"""
+    try:
+        order = int(context.args[0])
+        if order < 0 or order > 100:
+            await update.message.reply_text(f"Количество условий на порядок должно быть между 0 и {1000}")
+            return
+        params[user_id]['order'] = order
+        await new_params_send(context, user_id, update.message.from_user.username)
+        await update.message.reply_text(f"Количество условий на порядок установлено: {order}")
+    except (IndexError, ValueError):
+        await update.message.reply_text("Использование: /order <число>")
+
+
+async def set_relative(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = update.message.from_user.id
+    set_self_params(user_id)
+    """Устанавливает размер изображения"""
+    try:
+        relative = int(context.args[0])
+        if relative < 0 or relative > 100:
+            await update.message.reply_text(f"Количество условий на относительный порядок должно быть между 0 и {1000}")
+            return
+        params[user_id]['relative'] = relative
+        await new_params_send(context, user_id, update.message.from_user.username)
+        await update.message.reply_text(f"Количество условий на относительный порядок установлено: {relative}")
+    except (IndexError, ValueError):
+        await update.message.reply_text("Использование: /relative <число>")
+
+
+async def set_content(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = update.message.from_user.id
+    set_self_params(user_id)
+    """Устанавливает размер изображения"""
+    try:
+        content = int(context.args[0])
+        if content < 0 or content > 100:
+            await update.message.reply_text(f"Количество условий на содержание должно быть между 0 и {1000}")
+            return
+        params[user_id]['content'] = content
+        await new_params_send(context, user_id, update.message.from_user.username)
+        await update.message.reply_text(f"Количество условий на содержание установлено: {content}")
+    except (IndexError, ValueError):
+        await update.message.reply_text("Использование: /content <число>")
+
+
+async def set_equal(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = update.message.from_user.id
+    set_self_params(user_id)
+    """Устанавливает размер изображения"""
+    try:
+        equal = int(context.args[0])
+        if equal < 0 or equal > 100:
+            await update.message.reply_text(f"Количество условий на равенство должно быть между 0 и {1000}")
+            return
+        params[user_id]['equal'] = equal
+        await new_params_send(context, user_id, update.message.from_user.username)
+        await update.message.reply_text(f"Количество условий на равенство установлено: {equal}")
+    except (IndexError, ValueError):
+        await update.message.reply_text("Использование: /equal <число>")
+
+
+async def set_true(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = update.message.from_user.id
+    set_self_params(user_id)
+    """Устанавливает порог бинаризации"""
+    try:
+        true = float(context.args[0])
+        if true < 0 or true > 1:
+            await update.message.reply_text("Доля истинности должна быть между 0 и 1")
+            return
+        params[user_id]['true'] = true
+        await new_params_send(context, user_id, update.message.from_user.username)
+        await update.message.reply_text(f"Доля истинности установлена: {true}")
+    except (IndexError, ValueError):
+        await update.message.reply_text("Использование: /true <дробное число от 0 до 1>")
+
+
 async def reset_params(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.message.from_user.id
     set_self_params(user_id)
@@ -337,9 +507,11 @@ async def show_help(update: Update, context: ContextTypes.DEFAULT_TYPE):
     set_self_params(user_id)
     with open("log.txt", "a") as file:
         if update.message.from_user.username:
-            file.write(f"{datetime.datetime.now()} id:{user_id}, username:@{update.message.from_user.username}, params: {str(params)}, start\n")
+            file.write(
+                f"{datetime.datetime.now()} id:{user_id}, username:@{update.message.from_user.username}, params: {str(params)}, start\n")
             disk.upload("/log.txt", "log.txt", "log.txt")
-            await log_send_to_admin(context, f"{datetime.datetime.now()} id:{user_id}, username:@{update.message.from_user.username}, params: {str(params)}, start\n")
+            await log_send_to_admin(context,
+                                    f"{datetime.datetime.now()} id:{user_id}, username:@{update.message.from_user.username}, params: {str(params)}, start\n")
         else:
             file.write(f"{datetime.datetime.now()} id:{user_id}, params: {str(params)}, start\n")
             disk.upload("/log.txt", "log.txt", "log.txt")
@@ -356,21 +528,25 @@ async def show_log(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     with open("log.txt", "a") as file:
         if update.message.from_user.username:
-            file.write(f"{datetime.datetime.now()} id:{user_id}, username:@{update.message.from_user.username} admin log\n")
+            file.write(
+                f"{datetime.datetime.now()} id:{user_id}, username:@{update.message.from_user.username} admin log\n")
             disk.upload("/log.txt", "log.txt", "log.txt")
-            await log_send_to_admin(context,f"{datetime.datetime.now()} id:{user_id}, username:@{update.message.from_user.username} admin log\n")
+            await log_send_to_admin(context,
+                                    f"{datetime.datetime.now()} id:{user_id}, username:@{update.message.from_user.username} admin log\n")
         else:
             file.write(f"{datetime.datetime.now()} id:{user_id} admin log\n")
             disk.upload("/log.txt", "log.txt", "log.txt")
-            await log_send_to_admin(context,f"{datetime.datetime.now()} id:{user_id} admin log\n")
+            await log_send_to_admin(context, f"{datetime.datetime.now()} id:{user_id} admin log\n")
             # if user_id in config['admins']:
 
     if str(user_id) in ADMINS.split():
         with open("log.txt", "a") as file:
             if update.message.from_user.username:
-                file.write(f"{datetime.datetime.now()} id:{user_id}, username:@{update.message.from_user.username} admin success\n")
+                file.write(
+                    f"{datetime.datetime.now()} id:{user_id}, username:@{update.message.from_user.username} admin success\n")
                 disk.upload("/log.txt", "log.txt", "log.txt")
-                await log_send_to_admin(context, f"{datetime.datetime.now()} id:{user_id}, username:@{update.message.from_user.username} admin success\n")
+                await log_send_to_admin(context,
+                                        f"{datetime.datetime.now()} id:{user_id}, username:@{update.message.from_user.username} admin success\n")
             else:
                 file.write(f"{datetime.datetime.now()} id:{user_id} admin success\n")
                 disk.upload("/log.txt", "log.txt", "log.txt")
@@ -382,6 +558,7 @@ async def show_log(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 filename="log.txt",
                 caption="log"
             )
+
 
 async def log_send_to_admin(context: ContextTypes.DEFAULT_TYPE, message: str):
     try:
@@ -408,6 +585,7 @@ async def log_send_to_admin(context: ContextTypes.DEFAULT_TYPE, message: str):
     except Exception as e:
         print(e)
 
+
 async def main():
     global TOKEN
     """Запускает бота"""
@@ -424,6 +602,21 @@ async def main():
     application.add_handler(CommandHandler("help", show_help))
     application.add_handler(CommandHandler("start", show_help))
     application.add_handler(CommandHandler("log", show_log))
+
+    application.add_handler(CommandHandler("length", set_length))
+    application.add_handler(CommandHandler("order", set_order))
+    application.add_handler(CommandHandler("relative", set_relative))
+    application.add_handler(CommandHandler("content", set_content))
+    application.add_handler(CommandHandler("equal", set_equal))
+    application.add_handler(CommandHandler("true", set_true))
+    # application.add_handler(CommandHandler("colornames", set_colornames))
+    # application.add_handler(CommandHandler("bordersize", set_bordersize))
+    # application.add_handler(CommandHandler("offset", set_offset))
+    # application.add_handler(CommandHandler("end", set_end))
+    # application.add_handler(CommandHandler("beadsize", set_beadsize))
+    # application.add_handler(CommandHandler("distance", set_distance))
+    # application.add_handler(CommandHandler("levelsize", set_levelsize))
+    application.add_handler(CommandHandler("beads", beads))
 
     # Обработчик изображений
     application.add_handler(MessageHandler(filters.PHOTO, process_image))

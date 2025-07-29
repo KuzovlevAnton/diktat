@@ -9,7 +9,7 @@ import math
 
 
 
-def beads_processing(length=10, order_conditions=5,relative_order_conditions=5 ,content_conditions=5, equal_conditions=5, true_probability=0.5, bordersize=100, offset=200, end=100, size=100, between_dist_relative=1, levelsize=300):
+def beads_processing(length=10, order_conditions=5,relative_order_conditions=5 ,content_conditions=5, equal_conditions=5, true_probability=0.5, colornames = 0, bordersize=100, offset=200, end=100, size=100, between_dist_relative=1, levelsize=300):
     h = 3508
     w = 2480
     # bordersize = 100
@@ -92,24 +92,32 @@ def beads_processing(length=10, order_conditions=5,relative_order_conditions=5 ,
 
 
     def triangle(size, x, y, color=(0, 0, 255)):
-        nonlocal array
+        nonlocal array, colornames, colors, font
         vertices = numpy.array([[x, y], [x + size // 2, y - size * int(3 ** 0.5)], [x + size, y]])
         cv2.fillPoly(array, [vertices], color=color)
         cv2.polylines(array, [vertices], color=(0, 0, 0), thickness=3, isClosed=1)
+        if colornames:
+            cv2.putText(array, colors[color][0], (x-40, y+40), font, 2, (0, 0, 0), 2)
 
 
     def square(size, x, y, color=(0, 0, 255)):
-        nonlocal array
+        nonlocal array, colornames, colors, font
         vertices = numpy.array([[x, y], [x + size, y], [x + size, y - size], [x, y - size]])
         cv2.fillPoly(array, [vertices], color=color)
         cv2.polylines(array, [vertices], color=(0, 0, 0), thickness=3, isClosed=1)
+        if colornames:
+            cv2.putText(array, colors[color][0], (x-40, y+40), font, 2, (0, 0, 0), 2)
+
 
 
     def circle(size, x, y, color=(0, 0, 255)):
-        nonlocal array
+        nonlocal array, colornames, colors, font
         cv2.circle(array, (x + size // 2, y - size // 2), size // 4, color, size // 2)
         cv2.circle(array, (x + size // 2, y - size // 2), size // 2, (0, 0, 0), 2)
         # cv2.fill
+        if colornames:
+            cv2.putText(array, colors[color][0], (x-40, y+40), font, 2, (0, 0, 0), 2)
+
 
 
     def new_page(pages):
@@ -497,6 +505,7 @@ def beads_processing(length=10, order_conditions=5,relative_order_conditions=5 ,
         else:
             answers.append("Н")
 
+    print(answers)
     return answers
 
     # image1 = Image.open("newimage.png")
@@ -505,4 +514,4 @@ def beads_processing(length=10, order_conditions=5,relative_order_conditions=5 ,
     # image1.addPage("newimage.pdf")
 
 
-print(*beads_processing())
+beads_processing(colornames = 1)
