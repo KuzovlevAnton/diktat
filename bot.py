@@ -8,13 +8,13 @@ from telegram.ext import filters
 import datetime
 from beads import beads_processing
 from processing import processing
+from disk import disk
 import json
 import asyncio
 import os
 from dotenv import load_dotenv
 from flask import Flask
 from threading import Thread
-from disk import disk
 
 load_dotenv()
 
@@ -514,12 +514,12 @@ async def set_bordersize(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Устанавливает размер изображения"""
     try:
         bordersize = int(context.args[0])
-        if bordersize < 0 or bordersize > 1000:
-            await update.message.reply_text(f"Размер полей должен быть между 0 и {1000}")
+        if bordersize < 0 or bordersize > 400:
+            await update.message.reply_text(f"Размер полей должен быть между 0 и {400}")
             return
         params[user_id]['bordersize'] = bordersize
         await new_params_send(context, user_id, update.message.from_user.username)
-        await update.message.reply_text(f"Количество условий на равенство установлено: {bordersize}")
+        await update.message.reply_text(f"Размер полей установлен: {bordersize}")
     except (IndexError, ValueError):
         await update.message.reply_text("Использование: /bordersize <число>")
 
@@ -554,6 +554,38 @@ async def set_end(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(f"Отступ с конца установленен: {end}")
     except (IndexError, ValueError):
         await update.message.reply_text("Использование: /end <число>")
+
+
+async def set_beadsize(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = update.message.from_user.id
+    set_self_params(user_id)
+    """Устанавливает размер изображения"""
+    try:
+        beadsize = int(context.args[0])
+        if beadsize < 0 or beadsize > 500:
+            await update.message.reply_text(f"Размер бусины должен быть между 0 и {500}")
+            return
+        params[user_id]['beadsize'] = beadsize
+        await new_params_send(context, user_id, update.message.from_user.username)
+        await update.message.reply_text(f"Размер бусины установленен: {beadsize}")
+    except (IndexError, ValueError):
+        await update.message.reply_text("Использование: /beadsize <число>")
+
+
+async def set_levelsize(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = update.message.from_user.id
+    set_self_params(user_id)
+    """Устанавливает размер изображения"""
+    try:
+        levelsize = int(context.args[0])
+        if levelsize < 0 or levelsize > 1000:
+            await update.message.reply_text(f"Размер уровня бусин должен быть между 0 и {1000}")
+            return
+        params[user_id]['levelsize'] = levelsize
+        await new_params_send(context, user_id, update.message.from_user.username)
+        await update.message.reply_text(f"Размер уровня бусин установленен: {levelsize}")
+    except (IndexError, ValueError):
+        await update.message.reply_text("Использование: /levelsize <число>")
 
 
 async def reset_params(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -677,9 +709,9 @@ async def main():
     application.add_handler(CommandHandler("bordersize", set_bordersize))
     application.add_handler(CommandHandler("offset", set_offset))
     application.add_handler(CommandHandler("end", set_end))
-    # application.add_handler(CommandHandler("beadsize", set_beadsize))
+    application.add_handler(CommandHandler("beadsize", set_beadsize))
     # application.add_handler(CommandHandler("distance", set_distance))
-    # application.add_handler(CommandHandler("levelsize", set_levelsize))
+    application.add_handler(CommandHandler("levelsize", set_levelsize))
     application.add_handler(CommandHandler("beads", beads))
 
     # Обработчик изображений

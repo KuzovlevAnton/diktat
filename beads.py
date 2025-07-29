@@ -514,4 +514,4 @@ def beads_processing(length=10, order_conditions=5,relative_order_conditions=5 ,
     # image1.addPage("newimage.pdf")
 
 
-beads_processing(colornames = 1)
+# beads_processing(colornames = 1)
