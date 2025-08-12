@@ -91,32 +91,35 @@ def beads_processing(length=10, order_conditions=5,relative_order_conditions=5 ,
     # levelsize = 300
 
 
-    def triangle(size, x, y, color=(0, 0, 255)):
+    def triangle(size, x, y, color=(0, 0, 255), number = 1):
         nonlocal array, colornames, colors, font
         vertices = numpy.array([[x, y], [x + size // 2, y - size * int(3 ** 0.5)], [x + size, y]])
         cv2.fillPoly(array, [vertices], color=color)
         cv2.polylines(array, [vertices], color=(0, 0, 0), thickness=3, isClosed=1)
         if colornames:
-            cv2.putText(array, colors[color][0], (x-40, y+40), font, 2, (0, 0, 0), 2)
+            cv2.putText(array, colors[color][0], (x, y+40), font, 2, (0, 0, 0), 2)
+            cv2.putText(array, str(number), (x, y-40), font, 2, (0, 0, 0), 2)
 
 
-    def square(size, x, y, color=(0, 0, 255)):
+    def square(size, x, y, color=(0, 0, 255), number = 1):
         nonlocal array, colornames, colors, font
         vertices = numpy.array([[x, y], [x + size, y], [x + size, y - size], [x, y - size]])
         cv2.fillPoly(array, [vertices], color=color)
         cv2.polylines(array, [vertices], color=(0, 0, 0), thickness=3, isClosed=1)
         if colornames:
-            cv2.putText(array, colors[color][0], (x-40, y+40), font, 2, (0, 0, 0), 2)
+            cv2.putText(array, colors[color][0], (x, y+40), font, 2, (0, 0, 0), 2)
+            cv2.putText(array, str(number), (x, y-40), font, 2, (0, 0, 0), 2)
 
 
 
-    def circle(size, x, y, color=(0, 0, 255)):
+    def circle(size, x, y, color=(0, 0, 255), number = 1):
         nonlocal array, colornames, colors, font
         cv2.circle(array, (x + size // 2, y - size // 2), size // 4, color, size // 2)
         cv2.circle(array, (x + size // 2, y - size // 2), size // 2, (0, 0, 0), 2)
         # cv2.fill
         if colornames:
-            cv2.putText(array, colors[color][0], (x-40, y+40), font, 2, (0, 0, 0), 2)
+            cv2.putText(array, colors[color][0], (x, y+40), font, 2, (0, 0, 0), 2)
+            cv2.putText(array, str(number), (x, y-40), font, 2, (0, 0, 0), 2)
 
 
 
@@ -206,7 +209,7 @@ def beads_processing(length=10, order_conditions=5,relative_order_conditions=5 ,
     startx = 50 + bordersize
     endx = 2000 - bordersize
     y = 250 + size // 2 + offset
-
+    beadnumber = 1
     figures = []
     if length <= max_len:
         for index in range(length):
@@ -216,14 +219,15 @@ def beads_processing(length=10, order_conditions=5,relative_order_conditions=5 ,
 
             match randint(1, 3):
                 case 1:
-                    triangle(size, int(startx + index * ((endx - startx) / (length - 1))), y, color)
+                    triangle(size, int(startx + index * ((endx - startx) / (length - 1))), y, color, beadnumber)
                     figures.append((3, color))
                 case 2:
-                    square(size, int(startx + index * ((endx - startx) / (length - 1))), y, color)
+                    square(size, int(startx + index * ((endx - startx) / (length - 1))), y, color, beadnumber)
                     figures.append((2, color))
                 case 3:
-                    circle(size, int(startx + index * ((endx - startx) / (length - 1))), y, color)
+                    circle(size, int(startx + index * ((endx - startx) / (length - 1))), y, color, beadnumber)
                     figures.append((1, color))
+            beadnumber+=1
     else:
         if length % max_len == 0 and length > max_len:
             levels += 1
@@ -235,14 +239,15 @@ def beads_processing(length=10, order_conditions=5,relative_order_conditions=5 ,
 
                 match randint(1, 3):
                     case 1:
-                        triangle(size, int(startx + index * ((endx - startx) / (max_len - 1))), y + y_add * levelsize, color)
+                        triangle(size, int(startx + index * ((endx - startx) / (max_len - 1))), y + y_add * levelsize, color, beadnumber)
                         figures.append((3, color))
                     case 2:
-                        square(size, int(startx + index * ((endx - startx) / (max_len - 1))), y + y_add * levelsize, color)
+                        square(size, int(startx + index * ((endx - startx) / (max_len - 1))), y + y_add * levelsize, color, beadnumber)
                         figures.append((2, color))
                     case 3:
-                        circle(size, int(startx + index * ((endx - startx) / (max_len - 1))), y + y_add * levelsize, color)
+                        circle(size, int(startx + index * ((endx - startx) / (max_len - 1))), y + y_add * levelsize, color, beadnumber)
                         figures.append((1, color))
+                beadnumber+=1
         length = length % max_len
         for index in range(length):
             color = (255, 255, 255)
@@ -252,16 +257,17 @@ def beads_processing(length=10, order_conditions=5,relative_order_conditions=5 ,
             match randint(1, 3):
                 case 1:
                     triangle(size, int(startx + index * ((endx - startx) / (max_len - 1))), y + (levels - 1) * levelsize,
-                             color)
+                             color, beadnumber)
                     figures.append((3, color))
                 case 2:
                     square(size, int(startx + index * ((endx - startx) / (max_len - 1))), y + (levels - 1) * levelsize,
-                           color)
+                           color, beadnumber)
                     figures.append((2, color))
                 case 3:
                     circle(size, int(startx + index * ((endx - startx) / (max_len - 1))), y + (levels - 1) * levelsize,
-                           color)
+                           color, beadnumber)
                     figures.append((1, color))
+            beadnumber+=1
 
     last_y = y + levels * levelsize
 
