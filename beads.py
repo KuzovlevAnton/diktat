@@ -98,7 +98,7 @@ def beads_processing(length=10, order_conditions=5,relative_order_conditions=5 ,
         cv2.polylines(array, [vertices], color=(0, 0, 0), thickness=3, isClosed=1)
         if colornames:
             cv2.putText(array, colors[color][0], (x, y+40), font, 2, (0, 0, 0), 2)
-            cv2.putText(array, str(number), (x, y-40), font, 2, (0, 0, 0), 2)
+            cv2.putText(array, str(number), (x, y-20-size), font, 2, (0, 0, 0), 2)
 
 
     def square(size, x, y, color=(0, 0, 255), number = 1):
@@ -108,7 +108,7 @@ def beads_processing(length=10, order_conditions=5,relative_order_conditions=5 ,
         cv2.polylines(array, [vertices], color=(0, 0, 0), thickness=3, isClosed=1)
         if colornames:
             cv2.putText(array, colors[color][0], (x, y+40), font, 2, (0, 0, 0), 2)
-            cv2.putText(array, str(number), (x, y-40), font, 2, (0, 0, 0), 2)
+            cv2.putText(array, str(number), (x, y-20-size), font, 2, (0, 0, 0), 2)
 
 
 
@@ -119,7 +119,7 @@ def beads_processing(length=10, order_conditions=5,relative_order_conditions=5 ,
         # cv2.fill
         if colornames:
             cv2.putText(array, colors[color][0], (x, y+40), font, 2, (0, 0, 0), 2)
-            cv2.putText(array, str(number), (x, y-40), font, 2, (0, 0, 0), 2)
+            cv2.putText(array, str(number), (x, y-20-size), font, 2, (0, 0, 0), 2)
 
 
 
