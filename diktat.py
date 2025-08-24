@@ -12,7 +12,6 @@ def processing(path, image_size_horisontal=54, white_thereshold_relative=0.65, c
                     return 0
         return 255
 
-
     def lines_finding(ceils_data):
         lines = []
         for y in range(len(ceils_data)):
