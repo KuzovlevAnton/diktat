@@ -322,7 +322,7 @@ def processing(path, image_size_horisontal=54, white_thereshold_relative=0.65, c
                 for i2 in range(len(new_result[i])-1, 1, -1):
                     # print((i2-1)*(replaceble+" ")+replaceble, f"({replaceble})x{i2}")
                     new_result[i] = new_result[i].replace((i2-1)*(replaceble+" ")+replaceble+" ", f"({replaceble})x{i2} ")
-    print(to_replace)
+        print(to_replace)
     print()
     for i in range(len(new_result)):
         text += f"{str(i + 1)}. {new_result[i]}\n"
